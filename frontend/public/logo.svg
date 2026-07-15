@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-label="HeritageX">
+  <rect width="220" height="56" rx="14" fill="#1A1A2E"/>
+  <path d="M28 12l12 32h-6.5l-2.4-7.2H18.9L16.5 44H10l12-32h6zm-3 7.3-4.7 13.6h9.2L25 19.3z" fill="#C9A84C"/>
+  <path d="M57 17h6v10h11V17h6v27h-6V32H63v12h-6V17zm31.2 0H94v27h-5.8V17zm10.6 0h6.3l8.6 16.5V17h5.7v27h-6.2l-8.7-16.8V44h-5.7V17zm27.9 0h19v5.2h-6.7V44h-5.7V22.2h-6.6V17z" fill="#F7F4EF"/>
+  <circle cx="184" cy="28" r="13" fill="none" stroke="#0D7377" stroke-width="4"/>
+  <path d="M184 15l3.5 8.7 9.5 1-7.2 6.1 2.2 9.2-8-4.8-8 4.8 2.2-9.2-7.2-6.1 9.5-1L184 15z" fill="#0D7377"/>
+</svg>
+

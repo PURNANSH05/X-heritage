@@ -1,0 +1,4 @@
+{
+  "nav": { "home": "Home", "search": "Search", "scanner": "Scanner", "favorites": "Favorites", "about": "About" },
+  "common": { "explore": "Explore", "continue": "Continue", "save": "Save", "share": "Share", "view_details": "View Details", "get_directions": "Get Directions", "audio_guide": "Audio Guide", "search_placeholder": "Search any monument, city, or country", "language": "Language", "all": "All" }
+}

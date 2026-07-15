@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "होम",
+    "search": "खोजें",
+    "scanner": "स्कैनर",
+    "favorites": "सहेजे गए",
+    "about": "परिचय"
+  },
+  "common": {
+    "explore": "देखें",
+    "continue": "जारी रखें",
+    "save": "सहेजें",
+    "share": "साझा करें",
+    "view_details": "विवरण देखें",
+    "get_directions": "दिशा-निर्देश",
+    "audio_guide": "ऑडियो गाइड",
+    "search_placeholder": "किसी स्मारक, शहर, या देश को खोजें",
+    "language": "भाषा",
+    "all": "सभी"
+  }
+}
+
