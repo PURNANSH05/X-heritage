@@ -2,22 +2,22 @@
 /* Realistic hotel data near Indian heritage destinations */
 
 export const HOTEL_AMENITIES = {
-  wifi: { label: 'Free WiFi', icon: '📶' },
-  pool: { label: 'Swimming Pool', icon: '🏊' },
-  spa: { label: 'Spa & Wellness', icon: '💆' },
-  gym: { label: 'Fitness Center', icon: '🏋️' },
-  restaurant: { label: 'Restaurant', icon: '🍽️' },
-  bar: { label: 'Bar & Lounge', icon: '🍸' },
-  parking: { label: 'Free Parking', icon: '🅿️' },
-  ac: { label: 'Air Conditioning', icon: '❄️' },
-  breakfast: { label: 'Free Breakfast', icon: '🥐' },
-  concierge: { label: 'Concierge', icon: '🎩' },
-  laundry: { label: 'Laundry Service', icon: '👔' },
-  airport: { label: 'Airport Shuttle', icon: '🚌' },
-  petFriendly: { label: 'Pet Friendly', icon: '🐾' },
-  rooftop: { label: 'Rooftop View', icon: '🌇' },
-  heritage: { label: 'Heritage Property', icon: '🏰' },
-  yoga: { label: 'Yoga Classes', icon: '🧘' },
+  wifi: { label: 'Free WiFi', icon: 'wifi' },
+  pool: { label: 'Swimming Pool', icon: 'waves' },
+  spa: { label: 'Spa & Wellness', icon: 'sparkles' },
+  gym: { label: 'Fitness Center', icon: 'dumbbell' },
+  restaurant: { label: 'Restaurant', icon: 'utensils' },
+  bar: { label: 'Bar & Lounge', icon: 'wine' },
+  parking: { label: 'Free Parking', icon: 'car' },
+  ac: { label: 'Air Conditioning', icon: 'snowflake' },
+  breakfast: { label: 'Free Breakfast', icon: 'coffee' },
+  concierge: { label: 'Concierge', icon: 'info' },
+  laundry: { label: 'Laundry Service', icon: 'shirt' },
+  airport: { label: 'Airport Shuttle', icon: 'bus' },
+  petFriendly: { label: 'Pet Friendly', icon: 'paw' },
+  rooftop: { label: 'Rooftop View', icon: 'sunrise' },
+  heritage: { label: 'Heritage Property', icon: 'landmark' },
+  yoga: { label: 'Yoga Classes', icon: 'activity' },
 };
 
 export const ROOM_TYPES = [

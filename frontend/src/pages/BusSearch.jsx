@@ -1,6 +1,7 @@
 /* BusSearch.jsx — Bus booking page */
 import { useState } from 'react';
 import BookingModal from '../components/BookingModal.jsx';
+import Icon from '../components/Icon.jsx';
 import { formatPrice } from '../services/bookingService.js';
 
 const BUS_TYPES = ['All', 'AC Sleeper', 'Non-AC Sleeper', 'AC Seater', 'Non-AC Seater', 'Volvo AC', 'Multi-Axle Volvo'];
@@ -110,7 +111,7 @@ export default function BusSearch() {
     <section className="section flight-page">
       <div className="container">
         <div className="flights-hero">
-          <h1>🚌 Book Buses</h1>
+          <h1><Icon name="bus" size={24} /> Book Buses</h1>
           <p>Search thousands of bus routes with instant seat selection and booking</p>
         </div>
 
@@ -140,7 +141,7 @@ export default function BusSearch() {
               </select>
             </div>
             <button className={`btn btn-primary flight-search-btn ${searching ? 'loading' : ''}`} onClick={handleSearch} disabled={searching}>
-              {searching ? <><span className="login-spinner" /> Searching…</> : '🔍 Search Buses'}
+              {searching ? <><span className="login-spinner" /> Searching…</> : <><Icon name="search" size={16} /> Search Buses</>}
             </button>
           </div>
 
@@ -173,7 +174,7 @@ export default function BusSearch() {
                   <article key={bus.id} className={`flight-card ${activeBus?.id === bus.id ? 'flight-card-expanded' : ''}`}>
                     <div className="flight-card-main">
                       <div className="flight-airline">
-                        <span className="flight-airline-logo">🚌</span>
+                        <span className="flight-airline-logo"><Icon name="bus" size={20} /></span>
                         <div>
                           <div className="flight-airline-name">{bus.operator}</div>
                           <div className="flight-number">{bus.busType}</div>
@@ -187,7 +188,7 @@ export default function BusSearch() {
                         <div className="flight-route-line">
                           <div className="flight-route-track">
                             <div className="flight-route-dot" /><div className="flight-route-dashes" />
-                            <span className="flight-route-plane">🚌</span>
+                            <span className="flight-route-plane"><Icon name="bus" size={18} /></span>
                             <div className="flight-route-dashes" /><div className="flight-route-dot" />
                           </div>
                           <span className="flight-duration">{bus.duration}</span>

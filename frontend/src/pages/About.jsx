@@ -5,20 +5,24 @@ export default function About() {
         <div>
           <h1>About HeritageX</h1>
           <p>
-            HeritageX is a tourism and heritage platform built for scan-first discovery, multilingual
-            access, and clear visitor guidance.
+            HeritageX is a heritage discovery and trip-planning guide. Browse a curated catalog of
+            historic sites and landmarks, search for additional places worldwide, and bring the
+            information together with maps, visitor tips, and travel-planning tools.
           </p>
           <p>
-            The current build is a polished starter foundation: it includes the full page structure,
-            data model, routing, search, scanner workflow, and backend API surface.
+            Each curated destination can include a short history, practical visit guidance, photos,
+            location details, and nearby places. The camera scanner is an optional way to look up a
+            landmark; if scanning is unavailable, use the destination search instead. Search results
+            outside the curated catalog may come from external reference sources and should be
+            checked against official local information before travel.
           </p>
           <div className="team-panel">
             <h2>Mission</h2>
-            <p>Make heritage sites easier to find, easier to understand, and easier to visit.</p>
+            <p>Make heritage easier to discover and understand, and help travelers plan a more informed visit.</p>
           </div>
           <div className="team-panel">
-            <h2>Partners</h2>
-            <p>UNESCO, museum data teams, travel operators, and future content contributors.</p>
+            <h2>What you can do</h2>
+            <p>Explore heritage destinations, save favorites, use the scanner or search, and find trip-planning options for your visit.</p>
           </div>
         </div>
         <div className="team-panel">

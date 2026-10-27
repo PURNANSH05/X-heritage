@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Icon from './Icon.jsx';
 
 const DARK_KEY = 'heritagex-theme';
 
@@ -25,7 +26,7 @@ export default function DarkModeToggle({ isDark, onToggle }) {
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Light mode' : 'Dark mode'}
     >
-      {isDark ? '☀️' : '🌙'}
+      <Icon name={isDark ? 'sun' : 'moon'} size={18} />
       <span>{isDark ? 'Light' : 'Dark'}</span>
     </button>
   );

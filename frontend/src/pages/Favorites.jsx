@@ -5,6 +5,7 @@ import { readFavorites, toggleFavorite } from '../utils/favorites.js';
 import { generateFavoritesPDF } from '../utils/generateFavoritesPDF.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import SmartImage from '../components/SmartImage.jsx';
+import Icon from '../components/Icon.jsx';
 
 /* ── Share modal ── */
 function ShareModal({ onClose, favorites }) {
@@ -36,13 +37,13 @@ function ShareModal({ onClose, favorites }) {
   const SHARE_LINKS = [
     {
       name: 'WhatsApp',
-      icon: '💬',
+      icon: 'message',
       color: '#25D366',
       url: `https://wa.me/?text=${encodeURIComponent(shareText)}`,
     },
     {
       name: 'Email',
-      icon: '✉️',
+      icon: 'mail',
       color: '#0d7377',
       url: `mailto:?subject=My%20HeritageX%20Collection&body=${encodeURIComponent(shareText)}`,
     },
@@ -65,11 +66,11 @@ function ShareModal({ onClose, favorites }) {
       <div className="fav-modal" onClick={e => e.stopPropagation()}>
         <div className="fav-modal-header">
           <h3>Share My Collection</h3>
-          <button type="button" className="fav-modal-close" onClick={onClose}>✕</button>
+          <button type="button" className="fav-modal-close" onClick={onClose} aria-label="Close share dialog"><Icon name="close" /></button>
         </div>
 
         <div className="fav-modal-preview">
-          <div className="fav-modal-preview-icon">🏛️</div>
+          <div className="fav-modal-preview-icon"><Icon name="landmark" size={22} /></div>
           <div>
             <strong>My Heritage Collection</strong>
             <span>{favorites.length} heritage site{favorites.length !== 1 ? 's' : ''} saved</span>
@@ -80,7 +81,7 @@ function ShareModal({ onClose, favorites }) {
           {/* Native share if supported */}
           {navigator.share && (
             <button type="button" className="fav-share-native" onClick={handleNativeShare}>
-              {shared ? '✓ Shared!' : '📤 Share via your device'}
+              {shared ? '✓ Shared!' : <><Icon name="share" size={16} /> Share via your device</>}
             </button>
           )}
 
@@ -95,7 +96,7 @@ function ShareModal({ onClose, favorites }) {
                 className="fav-share-link"
                 style={{ '--share-color': link.color }}
               >
-                <span className="fav-share-link-icon">{link.icon}</span>
+                <span className="fav-share-link-icon">{link.name === 'Email' ? <Icon name="mail" /> : <Icon name="message" />}</span>
                 <span>{link.name}</span>
               </a>
             ))}
@@ -156,7 +157,7 @@ export default function Favorites() {
         <div className="fav-hero-glow" />
         <div className="container fav-hero-inner">
           <div className="fav-hero-left">
-            <div className="fav-hero-badge">❤️ My Collection</div>
+            <div className="fav-hero-badge"><Icon name="heart" size={16} /> My Collection</div>
             <h1 className="fav-hero-title">Heritage Favourites</h1>
             <p className="fav-hero-sub">
               Your curated selection of world heritage destinations.
@@ -178,7 +179,7 @@ export default function Favorites() {
                 ) : pdfDone ? (
                   <>✓ Downloaded!</>
                 ) : (
-                  <>📄 Download PDF</>
+                  <><Icon name="document" size={16} /> Download PDF</>
                 )}
               </button>
 
@@ -188,7 +189,7 @@ export default function Favorites() {
                 className="fav-share-btn"
                 onClick={() => setShowShare(true)}
               >
-                🔗 Share
+                <><Icon name="share" size={16} /> Share</>
               </button>
 
               {/* Add more */}
@@ -231,13 +232,13 @@ export default function Favorites() {
                 className={`fav-view-btn ${view === 'grid' ? 'active' : ''}`}
                 onClick={() => setView('grid')}
                 title="Grid view"
-              >⊞</button>
+              ><Icon name="grid" size={17} /></button>
               <button
                 type="button"
                 className={`fav-view-btn ${view === 'list' ? 'active' : ''}`}
                 onClick={() => setView('list')}
                 title="List view"
-              >☰</button>
+              ><Icon name="clipboard" size={17} /></button>
             </div>
           </div>
 
@@ -268,7 +269,7 @@ export default function Favorites() {
       <div className="container fav-content">
         {filtered.length === 0 && favorites.length > 0 ? (
           <div className="fav-empty">
-            <div className="fav-empty-icon">🔍</div>
+            <div className="fav-empty-icon"><Icon name="search" size={28} /></div>
             <h3>No sites in this category</h3>
             <button type="button" className="fav-filter-chip active" onClick={() => setFilter('all')}>
               Show all {favorites.length} sites
@@ -276,7 +277,7 @@ export default function Favorites() {
           </div>
         ) : favorites.length === 0 ? (
           <div className="fav-empty">
-            <div className="fav-empty-icon">🏛️</div>
+            <div className="fav-empty-icon"><Icon name="landmark" size={28} /></div>
             <h3>Your collection is empty</h3>
             <p>Start exploring and save sites you love to build your personal heritage collection.</p>
             <Link to="/search" className="fav-pdf-btn" style={{ textDecoration: 'none', width: 'fit-content' }}>
@@ -310,7 +311,7 @@ export default function Favorites() {
       {favorites.length > 0 && (
         <div className="container">
           <div className="fav-pdf-info">
-            <span className="fav-pdf-info-icon">📄</span>
+            <span className="fav-pdf-info-icon"><Icon name="document" size={20} /></span>
             <div>
               <strong>Download your collection as a PDF</strong>
               <span>A beautifully designed PDF with images, descriptions, tips, and ratings for all your saved sites.</span>
@@ -322,7 +323,7 @@ export default function Favorites() {
               disabled={pdfLoading}
               style={{ flexShrink: 0 }}
             >
-              {pdfLoading ? 'Generating…' : pdfDone ? '✓ Downloaded!' : '📄 Download PDF'}
+              {pdfLoading ? 'Generating…' : pdfDone ? '✓ Downloaded!' : <><Icon name="document" size={16} /> Download PDF</>}
             </button>
           </div>
         </div>
@@ -356,6 +357,7 @@ function FavCard({ site, onRemove }) {
           fallback={site.heroFallback || site.photos?.[0]?.fallback || site.photos?.[0]}
           alt={site.name.en}
           className="fav-card-img"
+          site={site}
         />
         <div className="fav-card-img-overlay" />
         {site.category && <span className="fav-card-category">{site.category}</span>}
@@ -396,6 +398,7 @@ function FavListRow({ site, onRemove }) {
           fallback={site.heroFallback}
           alt={site.name.en}
           className="fav-row-img"
+          site={site}
         />
       </div>
       <div className="fav-row-body">

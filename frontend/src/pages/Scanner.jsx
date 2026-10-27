@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import { useScanner } from '../hooks/useScanner.js';
+import Icon from '../components/Icon.jsx';
+import SmartImage from '../components/SmartImage.jsx';
 
 /* ── Animated scan-line that sweeps inside the viewfinder ── */
 function ScanLine({ active }) {
@@ -23,26 +25,26 @@ function Corners() {
 /* ── Status badge that floats over the viewfinder ── */
 function StatusBadge({ status, isScanning }) {
   const cfg = isScanning
-    ? { icon: '⏳', text: 'Scanning…', cls: 'sf-badge-scanning' }
+    ? { icon: 'loading', text: 'Scanning…', cls: 'sf-badge-scanning' }
     : status === 'matched'
-      ? { icon: '✓', text: 'Match Found!', cls: 'sf-badge-matched' }
+      ? { icon: 'confirmed', text: 'Match Found!', cls: 'sf-badge-matched' }
       : status === 'failed'
-        ? { icon: '✕', text: 'No Match', cls: 'sf-badge-failed' }
-        : { icon: '●', text: 'Ready', cls: 'sf-badge-idle' };
+        ? { icon: 'close', text: 'No Match', cls: 'sf-badge-failed' }
+        : { icon: 'circle', text: 'Ready', cls: 'sf-badge-idle' };
 
   return (
     <div className={`sf-badge ${cfg.cls}`} aria-live="polite">
       <span className="sf-badge-dot" />
-      <span>{cfg.icon} {cfg.text}</span>
+      <span><Icon name={cfg.icon} size={14} /> {cfg.text}</span>
     </div>
   );
 }
 
 /* ── Mode icons for the tab pills ── */
 const MODES = [
-  { id: 'camera', icon: '📷', label: 'Live Camera' },
-  { id: 'upload', icon: '🖼️',  label: 'Upload Photo' },
-  { id: 'search', icon: '🔍', label: 'Text Search'  },
+  { id: 'camera', icon: 'camera', label: 'Live Camera' },
+  { id: 'upload', icon: 'image',  label: 'Upload Photo' },
+  { id: 'search', icon: 'search', label: 'Text Search'  },
 ];
 
 export default function Scanner() {
@@ -138,7 +140,7 @@ export default function Scanner() {
         <div className="sc-hero-glow sc-hero-glow-1" />
         <div className="sc-hero-glow sc-hero-glow-2" />
         <div className="sc-hero-inner container">
-          <div className="sc-hero-badge">🏛️ AI Heritage Scanner</div>
+          <div className="sc-hero-badge"><Icon name="landmark" size={16} /> AI Heritage Scanner</div>
           <h1 className="sc-hero-title">Identify Any Heritage Site</h1>
           <p className="sc-hero-sub">
             Point your camera at a monument, upload a photo, or type its name —
@@ -156,7 +158,7 @@ export default function Scanner() {
                 className={`sc-tab ${mode === m.id ? 'sc-tab-active' : ''}`}
                 onClick={() => switchMode(m.id)}
               >
-                <span className="sc-tab-icon">{m.icon}</span>
+                <span className="sc-tab-icon"><Icon name={m.icon} size={17} /></span>
                 {m.label}
               </button>
             ))}
@@ -174,7 +176,7 @@ export default function Scanner() {
           {mode === 'camera' && (
             <div className="sc-panel">
               <div className="sc-panel-header">
-                <span className="sc-panel-icon">📷</span>
+                <span className="sc-panel-icon"><Icon name="camera" size={19} /></span>
                 <div>
                   <strong>Live Camera</strong>
                   <span>Allow camera access and capture any monument</span>
@@ -192,7 +194,7 @@ export default function Scanner() {
                   <img src={previewUrl} alt="Captured" className="sc-vf-media" />
                 ) : cameraError ? (
                   <div className="sc-vf-error">
-                    <span className="sc-vf-error-icon">📷</span>
+                    <span className="sc-vf-error-icon"><Icon name="camera" size={22} /></span>
                     <strong>Camera Unavailable</strong>
                     <p>Your browser blocked camera access, or no camera is connected.</p>
                     <button type="button" className="sc-link" onClick={() => switchMode('upload')}>
@@ -218,7 +220,7 @@ export default function Scanner() {
               {/* Preview info bar */}
               {previewUrl && (
                 <div className="sc-preview-bar">
-                  <span className="sc-preview-name">📸 {previewName}</span>
+                  <span className="sc-preview-name"><Icon name="camera" size={14} /> {previewName}</span>
                   <button type="button" className="sc-clear-btn" onClick={handleClear}>✕ Clear</button>
                 </div>
               )}
@@ -243,7 +245,7 @@ export default function Scanner() {
                   onClick={() => fileRef.current?.click()}
                   disabled={isScanning}
                 >
-                  🖼️ Upload Instead
+                  <><Icon name="image" size={16} /> Upload Instead</>
                 </button>
               </div>
             </div>
@@ -253,7 +255,7 @@ export default function Scanner() {
           {mode === 'upload' && (
             <div className="sc-panel">
               <div className="sc-panel-header">
-                <span className="sc-panel-icon">🖼️</span>
+                <span className="sc-panel-icon"><Icon name="image" size={19} /></span>
                 <div>
                   <strong>Upload a Photo</strong>
                   <span>JPG, PNG, WEBP — drop or click to select</span>
@@ -270,7 +272,7 @@ export default function Scanner() {
                     {isScanning && <div className="sc-pulse-ring" />}
                   </div>
                   <div className="sc-preview-bar">
-                    <span className="sc-preview-name">🖼️ {previewName.length > 36 ? previewName.slice(0, 36) + '…' : previewName}</span>
+                    <span className="sc-preview-name"><Icon name="image" size={14} /> {previewName.length > 36 ? previewName.slice(0, 36) + '…' : previewName}</span>
                     <button type="button" className="sc-clear-btn" onClick={handleClear}>✕ Clear</button>
                   </div>
                 </>
@@ -286,7 +288,7 @@ export default function Scanner() {
                   onKeyDown={(e) => e.key === 'Enter' && fileRef.current?.click()}
                   aria-label="Upload photo"
                 >
-                  <div className="sc-dropzone-icon">🏛️</div>
+                  <div className="sc-dropzone-icon"><Icon name="landmark" size={28} /></div>
                   <strong className="sc-dropzone-title">Drop your photo here</strong>
                   <p className="sc-dropzone-sub">or click to browse files</p>
                   <div className="sc-dropzone-formats">
@@ -302,7 +304,7 @@ export default function Scanner() {
                   onClick={() => fileRef.current?.click()}
                   disabled={isScanning}
                 >
-                  {isScanning ? <><span className="sc-spinner" /> Analysing…</> : '🖼️ Choose Photo'}
+                  {isScanning ? <><span className="sc-spinner" /> Analysing…</> : <><Icon name="image" size={16} /> Choose Photo</>}
                 </button>
               </div>
             </div>
@@ -312,7 +314,7 @@ export default function Scanner() {
           {mode === 'search' && (
             <div className="sc-panel">
               <div className="sc-panel-header">
-                <span className="sc-panel-icon">🔍</span>
+                <span className="sc-panel-icon"><Icon name="search" size={19} /></span>
                 <div>
                   <strong>Search by Name</strong>
                   <span>Type any monument, city, or country</span>
@@ -321,7 +323,7 @@ export default function Scanner() {
 
               <form className="sc-search-form" onSubmit={handleSearch}>
                 <div className="sc-search-wrap">
-                  <span className="sc-search-icon">🔍</span>
+                  <span className="sc-search-icon"><Icon name="search" size={17} /></span>
                   <input
                     ref={inputRef}
                     className="sc-search-input"
@@ -336,7 +338,7 @@ export default function Scanner() {
                   )}
                 </div>
                 <button type="submit" className="sc-capture-btn" disabled={isScanning || !query.trim()}>
-                  {isScanning ? <><span className="sc-spinner" /> Searching…</> : '🔍 Search'}
+                  {isScanning ? <><span className="sc-spinner" /> Searching…</> : <><Icon name="search" size={16} /> Search</>}
                 </button>
               </form>
 
@@ -388,11 +390,12 @@ export default function Scanner() {
               <div className="sc-result-body">
                 {resultSite.heroImage && (
                   <div className="sc-result-image-wrap">
-                    <img
+                    <SmartImage
                       src={resultSite.heroImage}
+                      fallback={resultSite.photos?.[0]?.url || resultSite.photos?.[0]}
                       alt={resultSite.name?.en}
                       className="sc-result-image"
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      site={resultSite}
                     />
                     <div className="sc-result-image-overlay" />
                   </div>

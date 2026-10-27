@@ -25,12 +25,12 @@ export const STATIONS = [
 ];
 
 export const COACH_TYPES = [
-  { code: 'SL', label: 'Sleeper (SL)', description: 'Budget sleeper berths', icon: '🛏️' },
-  { code: '3A', label: 'AC 3 Tier (3A)', description: 'Air-conditioned 3-tier berths', icon: '❄️' },
-  { code: '2A', label: 'AC 2 Tier (2A)', description: 'Air-conditioned 2-tier berths', icon: '🌬️' },
-  { code: '1A', label: 'First AC (1A)', description: 'Premium private cabins', icon: '👑' },
-  { code: 'CC', label: 'Chair Car (CC)', description: 'Day travel reclining seats', icon: '💺' },
-  { code: 'EC', label: 'Executive Chair (EC)', description: 'Premium day travel', icon: '✨' },
+  { code: 'SL', label: 'Sleeper (SL)', description: 'Budget sleeper berths', icon: 'bed' },
+  { code: '3A', label: 'AC 3 Tier (3A)', description: 'Air-conditioned 3-tier berths', icon: 'snowflake' },
+  { code: '2A', label: 'AC 2 Tier (2A)', description: 'Air-conditioned 2-tier berths', icon: 'snowflake' },
+  { code: '1A', label: 'First AC (1A)', description: 'Premium private cabins', icon: 'sparkles' },
+  { code: 'CC', label: 'Chair Car (CC)', description: 'Day travel reclining seats', icon: 'activity' },
+  { code: 'EC', label: 'Executive Chair (EC)', description: 'Premium day travel', icon: 'sparkles' },
 ];
 
 const BASE_FARES = { SL: 280, '3A': 750, '2A': 1100, '1A': 2100, CC: 520, EC: 1050 };

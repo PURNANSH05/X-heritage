@@ -5,16 +5,17 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { getUserBookings, addSampleBookings, cancelBooking, formatPrice, getBookingTypeLabel } from '../services/bookingService.js';
 import StatusBadge from '../components/StatusBadge.jsx';
 import { openTicketPrintWindow } from '../utils/ticketGenerator.js';
+import Icon from '../components/Icon.jsx';
 
 const TABS = ['All Bookings', 'Upcoming', 'Past Trips', 'E-Tickets', 'Payments', 'Profile'];
 
 const TAB_ICONS = {
-  'All Bookings': '📋',
-  'Upcoming': '🗓️',
-  'Past Trips': '🕐',
-  'E-Tickets': '🎟️',
-  'Payments': '💳',
-  'Profile': '👤',
+  'All Bookings': 'clipboard',
+  'Upcoming': 'calendar',
+  'Past Trips': 'clock',
+  'E-Tickets': 'ticket',
+  'Payments': 'card',
+  'Profile': 'user',
 };
 
 /* ── Booking Card ──────────────────────────────────────────── */
@@ -37,7 +38,7 @@ function BookingCard({ booking, onCancel }) {
               onClick={() => openTicketPrintWindow(booking)}
               title="Download or Print your E-Ticket as PDF"
             >
-              ⬇ E-Ticket
+              <Icon name="download" size={15} /> E-Ticket
             </button>
           )}
         </div>
@@ -53,7 +54,7 @@ function BookingCard({ booking, onCancel }) {
                 <span className="dbc-city-time">{booking.departure}</span>
               </div>
               <div className="dbc-route-mid">
-                <span className="dbc-route-line">────✈────</span>
+                <span className="dbc-route-line">────<Icon name="plane" size={16} />────</span>
                 <span className="dbc-route-class">{booking.travelClass}</span>
               </div>
               <div className="dbc-city dbc-city-right">
@@ -62,10 +63,10 @@ function BookingCard({ booking, onCancel }) {
               </div>
             </div>
             <div className="dbc-tags">
-              <span className="dbc-tag">✈ {booking.airline}</span>
-              <span className="dbc-tag">🔢 {booking.flightNumber}</span>
-              <span className="dbc-tag">🗓 {booking.date}</span>
-              <span className="dbc-tag">👥 {booking.passengers} Pax</span>
+              <span className="dbc-tag"><Icon name="plane" size={14} /> {booking.airline}</span>
+              <span className="dbc-tag"><Icon name="ticket" size={14} /> {booking.flightNumber}</span>
+              <span className="dbc-tag"><Icon name="calendar" size={14} /> {booking.date}</span>
+              <span className="dbc-tag"><Icon name="users" size={14} /> {booking.passengers} Pax</span>
               {booking.pnr && <span className="dbc-tag dbc-pnr">PNR: {booking.pnr}</span>}
             </div>
           </>
@@ -79,7 +80,7 @@ function BookingCard({ booking, onCancel }) {
                 <span className="dbc-city-time">{booking.departure}</span>
               </div>
               <div className="dbc-route-mid">
-                <span className="dbc-route-line">────🚂────</span>
+                <span className="dbc-route-line">────<Icon name="train" size={16} />────</span>
                 <span className="dbc-route-class">{booking.coachType}</span>
               </div>
               <div className="dbc-city dbc-city-right">
@@ -88,10 +89,10 @@ function BookingCard({ booking, onCancel }) {
               </div>
             </div>
             <div className="dbc-tags">
-              <span className="dbc-tag">🚂 {booking.trainName}</span>
-              <span className="dbc-tag">🔢 #{booking.trainNumber}</span>
-              <span className="dbc-tag">🗓 {booking.date}</span>
-              <span className="dbc-tag">👥 {booking.passengers} Pax</span>
+              <span className="dbc-tag"><Icon name="train" size={14} /> {booking.trainName}</span>
+              <span className="dbc-tag"><Icon name="ticket" size={14} /> #{booking.trainNumber}</span>
+              <span className="dbc-tag"><Icon name="calendar" size={14} /> {booking.date}</span>
+              <span className="dbc-tag"><Icon name="users" size={14} /> {booking.passengers} Pax</span>
               {booking.pnr && <span className="dbc-tag dbc-pnr">PNR: {booking.pnr}</span>}
             </div>
           </>
@@ -102,15 +103,15 @@ function BookingCard({ booking, onCancel }) {
             <div className="dbc-route">
               <div className="dbc-city" style={{ alignItems: 'flex-start' }}>
                 <span className="dbc-city-code" style={{ fontSize: 16 }}>{booking.hotelName}</span>
-                <span className="dbc-city-time">📍 {booking.destination}</span>
+                <span className="dbc-city-time"><Icon name="mapPin" size={14} /> {booking.destination}</span>
               </div>
             </div>
             <div className="dbc-tags">
-              <span className="dbc-tag">🛏 {booking.roomType}</span>
-              <span className="dbc-tag">📅 Check-in: {booking.checkin}</span>
-              <span className="dbc-tag">📅 Check-out: {booking.checkout}</span>
-              <span className="dbc-tag">🌙 {booking.nights} night{booking.nights > 1 ? 's' : ''}</span>
-              <span className="dbc-tag">👥 {booking.guests} guest{booking.guests > 1 ? 's' : ''}</span>
+              <span className="dbc-tag"><Icon name="bed" size={14} /> {booking.roomType}</span>
+              <span className="dbc-tag"><Icon name="calendar" size={14} /> Check-in: {booking.checkin}</span>
+              <span className="dbc-tag"><Icon name="calendar" size={14} /> Check-out: {booking.checkout}</span>
+              <span className="dbc-tag"><Icon name="moon" size={14} /> {booking.nights} night{booking.nights > 1 ? 's' : ''}</span>
+              <span className="dbc-tag"><Icon name="users" size={14} /> {booking.guests} guest{booking.guests > 1 ? 's' : ''}</span>
             </div>
           </>
         )}
@@ -123,7 +124,7 @@ function BookingCard({ booking, onCancel }) {
                 <span className="dbc-city-time">{booking.departure}</span>
               </div>
               <div className="dbc-route-mid">
-                <span className="dbc-route-line">────🚌────</span>
+                <span className="dbc-route-line">────<Icon name="bus" size={16} />────</span>
                 <span className="dbc-route-class">{booking.busType || 'AC Bus'}</span>
               </div>
               <div className="dbc-city dbc-city-right">
@@ -131,9 +132,9 @@ function BookingCard({ booking, onCancel }) {
               </div>
             </div>
             <div className="dbc-tags">
-              <span className="dbc-tag">🚌 {booking.operator}</span>
-              <span className="dbc-tag">🗓 {booking.date}</span>
-              <span className="dbc-tag">👥 {booking.passengers} Pax</span>
+              <span className="dbc-tag"><Icon name="bus" size={14} /> {booking.operator}</span>
+              <span className="dbc-tag"><Icon name="calendar" size={14} /> {booking.date}</span>
+              <span className="dbc-tag"><Icon name="users" size={14} /> {booking.passengers} Pax</span>
             </div>
           </>
         )}
@@ -145,16 +146,16 @@ function BookingCard({ booking, onCancel }) {
                 <span className="dbc-city-code" style={{ fontSize: 14 }}>{booking.from}</span>
               </div>
               <div className="dbc-route-mid">
-                <span className="dbc-route-line">────🚗────</span>
+                <span className="dbc-route-line">────<Icon name="car" size={16} />────</span>
               </div>
               <div className="dbc-city dbc-city-right">
                 <span className="dbc-city-code" style={{ fontSize: 14 }}>{booking.to}</span>
               </div>
             </div>
             <div className="dbc-tags">
-              <span className="dbc-tag">🚗 {booking.vehicleType}</span>
-              {booking.provider && <span className="dbc-tag">📱 {booking.provider}</span>}
-              {booking.schedule && <span className="dbc-tag">⏰ {booking.schedule}</span>}
+              <span className="dbc-tag"><Icon name="car" size={14} /> {booking.vehicleType}</span>
+              {booking.provider && <span className="dbc-tag"><Icon name="phone" size={14} /> {booking.provider}</span>}
+              {booking.schedule && <span className="dbc-tag"><Icon name="clock" size={14} /> {booking.schedule}</span>}
             </div>
           </>
         )}
@@ -173,7 +174,7 @@ function BookingCard({ booking, onCancel }) {
               onClick={() => openTicketPrintWindow(booking)}
               title="Download PDF E-Ticket"
             >
-              📄 Download E-Ticket PDF
+              <Icon name="document" size={15} /> Download E-Ticket PDF
             </button>
           )}
           {isCancellable && isUpcoming && (
@@ -197,12 +198,12 @@ function BookingCard({ booking, onCancel }) {
 /* ── E-Ticket Gallery Card ─────────────────────────────────── */
 function ETicketCard({ booking }) {
   const price = booking.price || booking.totalPrice || 0;
-  const typeIcons = { flight: '✈️', train: '🚂', hotel: '🏨', bus: '🚌', cab: '🚗' };
+  const typeIcons = { flight: 'plane', train: 'train', hotel: 'hotel', bus: 'bus', cab: 'car' };
 
   return (
     <div className="eticket-card">
       <div className="eticket-left">
-        <div className="eticket-icon">{typeIcons[booking.type] || '🎟️'}</div>
+        <div className="eticket-icon"><Icon name="ticket" size={22} /></div>
         <div>
           <div className="eticket-type">{getBookingTypeLabel(booking.type)}</div>
           <div className="eticket-route">
@@ -211,7 +212,7 @@ function ETicketCard({ booking }) {
               : `${booking.from} → ${booking.to}`}
           </div>
           <div className="eticket-date">
-            📅 {booking.date || booking.checkin || new Date(booking.createdAt).toLocaleDateString('en-IN')}
+            <Icon name="calendar" size={14} /> {booking.date || booking.checkin || new Date(booking.createdAt).toLocaleDateString('en-IN')}
           </div>
           <div className="eticket-id">Booking ID: #{booking.id}</div>
         </div>
@@ -223,7 +224,7 @@ function ETicketCard({ booking }) {
           className="eticket-download-btn"
           onClick={() => openTicketPrintWindow(booking)}
         >
-          📄 Download E-Ticket PDF
+          <Icon name="document" size={15} /> Download E-Ticket PDF
         </button>
       </div>
     </div>
@@ -269,45 +270,45 @@ export default function Dashboard() {
         {/* ── Header ── */}
         <div className="dashboard-header">
           <div className="dashboard-welcome">
-            <div className="dashboard-avatar">{user?.name?.[0]?.toUpperCase() || '👤'}</div>
+            <div className="dashboard-avatar">{user?.name?.[0]?.toUpperCase() || <Icon name="user" size={22} />}</div>
             <div>
               <h1 style={{ margin: '0 0 4px', fontSize: 24, fontWeight: 800 }}>
-                Welcome back, {user?.name?.split(' ')[0]}! 👋
+                Welcome back, {user?.name?.split(' ')[0]}!
               </h1>
-              <p className="dashboard-email">📧 {user?.email}</p>
+              <p className="dashboard-email"><Icon name="mail" size={15} /> {user?.email}</p>
             </div>
           </div>
           <div className="dashboard-quick-actions">
-            <Link to="/trip-planner" className="btn btn-primary">🗺️ Plan New Trip</Link>
-            <Link to="/flights" className="btn btn-secondary">✈️ Book Flight</Link>
+            <Link to="/trip-planner" className="btn btn-primary"><Icon name="map" size={16} /> Plan New Trip</Link>
+            <Link to="/flights" className="btn btn-secondary"><Icon name="plane" size={16} /> Book Flight</Link>
           </div>
         </div>
 
         {/* ── Stats ── */}
         <div className="dashboard-stats-grid">
           <div className="dashboard-stat-card">
-            <span className="dst-icon">📋</span>
+            <span className="dst-icon"><Icon name="clipboard" /></span>
             <div>
               <strong>{bookings.length}</strong>
               <span>Total Bookings</span>
             </div>
           </div>
           <div className="dashboard-stat-card">
-            <span className="dst-icon">🗓️</span>
+            <span className="dst-icon"><Icon name="calendar" /></span>
             <div>
               <strong>{upcomingBookings.length}</strong>
               <span>Upcoming Trips</span>
             </div>
           </div>
           <div className="dashboard-stat-card">
-            <span className="dst-icon">🎟️</span>
+            <span className="dst-icon"><Icon name="ticket" /></span>
             <div>
               <strong>{ticketableBookings.length}</strong>
               <span>E-Tickets</span>
             </div>
           </div>
           <div className="dashboard-stat-card">
-            <span className="dst-icon">💰</span>
+            <span className="dst-icon"><Icon name="payments" /></span>
             <div>
               <strong>{formatPrice(totalSpent)}</strong>
               <span>Total Spent</span>
@@ -317,12 +318,12 @@ export default function Dashboard() {
 
         {/* ── Quick Links ── */}
         <div className="dashboard-booking-strip">
-          <Link to="/flights" className="dash-strip-btn">✈️ Book Flights</Link>
-          <Link to="/trains" className="dash-strip-btn">🚂 Book Trains</Link>
-          <Link to="/hotels" className="dash-strip-btn">🏨 Book Hotels</Link>
-          <Link to="/buses" className="dash-strip-btn">🚌 Book Buses</Link>
-          <Link to="/local-transport" className="dash-strip-btn">🚗 Book Cabs</Link>
-          <Link to="/trip-planner" className="dash-strip-btn">🗺️ AI Trip Planner</Link>
+          <Link to="/flights" className="dash-strip-btn"><Icon name="plane" size={16} /> Book Flights</Link>
+          <Link to="/trains" className="dash-strip-btn"><Icon name="train" size={16} /> Book Trains</Link>
+          <Link to="/hotels" className="dash-strip-btn"><Icon name="hotel" size={16} /> Book Hotels</Link>
+          <Link to="/buses" className="dash-strip-btn"><Icon name="bus" size={16} /> Book Buses</Link>
+          <Link to="/local-transport" className="dash-strip-btn"><Icon name="car" size={16} /> Book Cabs</Link>
+          <Link to="/trip-planner" className="dash-strip-btn"><Icon name="map" size={16} /> AI Trip Planner</Link>
         </div>
 
         {/* ── Tabs ── */}
@@ -334,7 +335,7 @@ export default function Dashboard() {
               onClick={() => setActiveTab(tab)}
               style={{ whiteSpace: 'nowrap' }}
             >
-              {TAB_ICONS[tab]} {tab}
+              <Icon name={TAB_ICONS[tab]} size={16} /> {tab}
             </button>
           ))}
         </div>
@@ -344,7 +345,7 @@ export default function Dashboard() {
           <div className="dashboard-bookings-list">
             {displayBookings.length === 0 ? (
               <div className="empty-state">
-                <div style={{ fontSize: 56 }}>🗺️</div>
+                <div><Icon name="map" size={48} /></div>
                 <h3>No {activeTab.toLowerCase()} found</h3>
                 <p>{activeTab === 'Upcoming'
                   ? "You don't have any upcoming trips. Start planning now!"
@@ -366,7 +367,7 @@ export default function Dashboard() {
           <div>
             <div className="eticket-header-banner">
               <div>
-                <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>🎟️ My E-Tickets</h2>
+                <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}><Icon name="ticket" size={20} /> My E-Tickets</h2>
                 <p style={{ margin: '6px 0 0', opacity: 0.85, fontSize: 13 }}>
                   Download any ticket as PDF — save to your phone or print for travel.
                 </p>
@@ -378,7 +379,7 @@ export default function Dashboard() {
 
             {ticketableBookings.length === 0 ? (
               <div className="empty-state">
-                <div style={{ fontSize: 56 }}>🎟️</div>
+                <div><Icon name="ticket" size={48} /></div>
                 <h3>No e-tickets yet</h3>
                 <p>Book a flight, train, hotel or bus — your e-ticket will appear here for download.</p>
                 <Link to="/flights" className="btn btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>

@@ -1,4 +1,6 @@
 /* TripCard.jsx — Day itinerary card with activity timeline */
+import Icon from './Icon.jsx';
+
 export default function TripCard({ day, date, activities }) {
   const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const activityTypeColors = {
@@ -40,16 +42,16 @@ export default function TripCard({ day, date, activities }) {
               </div>
               <div className="trip-activity-content">
                 <div className="trip-activity-header">
-                  <span className="trip-activity-icon">{act.icon}</span>
+                  <span className="trip-activity-icon"><Icon name={act.icon} size={18} /></span>
                   <strong className="trip-activity-name">{act.activity}</strong>
                   <span className="trip-activity-type-badge" style={{ background: color + '20', color }}>
                     {act.type}
                   </span>
                 </div>
                 <div className="trip-activity-meta">
-                  <span>⏱ {act.duration}</span>
+                  <span><Icon name="clock" size={14} /> {act.duration}</span>
                 </div>
-                {act.notes && <p className="trip-activity-notes">💡 {act.notes}</p>}
+                {act.notes && <p className="trip-activity-notes"><Icon name="info" size={14} /> {act.notes}</p>}
               </div>
             </div>
           );

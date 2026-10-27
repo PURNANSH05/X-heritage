@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import Icon from '../components/Icon.jsx';
 
 /* ─── Floating particle for the animated background ─── */
 function Particle({ style }) {
@@ -166,7 +167,7 @@ export default function Login() {
         {/* Brand Content */}
         <div className="login-brand">
           <div className="login-logo-wrap">
-            <img src="/logo.svg" alt="HeritageX" className="login-logo" />
+            <img src="/logo-light.svg" alt="HeritageX" className="login-logo" />
           </div>
 
           <div className="login-brand-text">
@@ -246,7 +247,7 @@ export default function Login() {
           {/* Demo Banner (login mode only) */}
           {mode === 'login' && (
             <button type="button" className="login-demo-banner" onClick={fillDemo}>
-              <span className="login-demo-icon">🚀</span>
+              <span className="login-demo-icon"><Icon name="sparkles" size={20} /></span>
               <div>
                 <strong>Try the demo account</strong>
                 <span>demo@heritagex.com · heritage123</span>
@@ -262,7 +263,7 @@ export default function Login() {
               <div className="login-field">
                 <label htmlFor="login-name">Full Name</label>
                 <div className="login-input-wrap">
-                  <span className="login-input-icon">👤</span>
+                  <span className="login-input-icon"><Icon name="user" size={17} /></span>
                   <input
                     id="login-name"
                     name="name"
@@ -281,7 +282,7 @@ export default function Login() {
             <div className="login-field">
               <label htmlFor="login-email">Email Address</label>
               <div className="login-input-wrap">
-                <span className="login-input-icon">✉️</span>
+                <span className="login-input-icon"><Icon name="mail" size={17} /></span>
                 <input
                   id="login-email"
                   ref={emailRef}
@@ -307,7 +308,7 @@ export default function Login() {
                 )}
               </div>
               <div className="login-input-wrap">
-                <span className="login-input-icon">🔒</span>
+                <span className="login-input-icon"><Icon name="lock" size={17} /></span>
                 <input
                   id="login-password"
                   name="password"
@@ -324,7 +325,7 @@ export default function Login() {
                   onClick={() => setShowPw((v) => !v)}
                   aria-label={showPw ? 'Hide password' : 'Show password'}
                 >
-                  {showPw ? '🙈' : '👁️'}
+                  <Icon name={showPw ? 'eyeOff' : 'eye'} size={17} />
                 </button>
               </div>
             </div>
@@ -334,7 +335,7 @@ export default function Login() {
               <div className="login-field">
                 <label htmlFor="login-confirm">Confirm Password</label>
                 <div className="login-input-wrap">
-                  <span className="login-input-icon">🔒</span>
+                  <span className="login-input-icon"><Icon name="lock" size={17} /></span>
                   <input
                     id="login-confirm"
                     name="confirm"
@@ -364,14 +365,14 @@ export default function Login() {
             {/* Error */}
             {error && (
               <div className="login-error" role="alert">
-                <span>⚠️</span> {error}
+                <Icon name="warning" size={16} /> {error}
               </div>
             )}
 
             {/* Success */}
             {success && (
               <div className="login-success" role="status">
-                <span>✅</span>{' '}
+                <Icon name="confirmed" size={16} />{' '}
                 {mode === 'login' ? 'Welcome back! Redirecting…' : 'Account created! Redirecting…'}
               </div>
             )}

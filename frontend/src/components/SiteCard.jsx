@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Badge from './Badge.jsx';
 import SmartImage from './SmartImage.jsx';
+import Icon from './Icon.jsx';
 
 export default function SiteCard({ site, featured = false }) {
   const heroImage = site.heroImage || site.photos?.[0]?.url || site.photos?.[0] || '';
@@ -8,7 +9,7 @@ export default function SiteCard({ site, featured = false }) {
   return (
     <article className={`site-card ${featured ? 'site-card-featured' : ''}`}>
       <div className="site-card-media">
-        <SmartImage src={heroImage} fallback={heroFallback} alt={site.name.en} className="site-card-media-image" />
+        <SmartImage src={heroImage} fallback={heroFallback} alt={site.name.en} className="site-card-media-image" site={site} />
         <div className="site-card-media-overlay" />
         <Badge tone="gold">{site.category}</Badge>
       </div>
@@ -24,7 +25,7 @@ export default function SiteCard({ site, featured = false }) {
           <Link className="btn btn-small btn-primary" to={`/site/${site.id}`}>
             View Details
           </Link>
-          <span className="rating">★ {site.rating.toFixed(1)}</span>
+          <span className="rating"><Icon name="star" size={14} /> {site.rating.toFixed(1)}</span>
         </div>
       </div>
     </article>

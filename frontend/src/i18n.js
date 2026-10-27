@@ -2,8 +2,8 @@ export const translations = {
   en: {
     appName: 'HeritageX',
     tagline: 'Discover. Scan. Explore.',
-    heroTitle: "Explore the World's Heritage - One Scan at a Time",
-    heroSubtitle: 'Point your camera at any monument, or search any city in the world.',
+    heroTitle: 'Discover Heritage. Plan Your Visit.',
+    heroSubtitle: 'Explore curated heritage destinations, or search worldwide for places to learn about and plan your trip.',
     startScanning: 'Start Scanning',
     browseDestinations: 'Browse Destinations',
     howItWorks: 'How It Works',

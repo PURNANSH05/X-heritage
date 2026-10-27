@@ -1,138 +1,58 @@
 /* TripPlanner.jsx — Complete AI Trip Planning Wizard */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { sites } from '../data/sites.js';
+import Icon from '../components/Icon.jsx';
 
 /* ── Constants ──────────────────────────────────────────────── */
 const BUDGETS = [
-  { id: 'budget', label: '🎒 Budget', desc: 'Hostels · Auto · Street food', color: '#27ae60', range: '₹500–1,500/day' },
-  { id: 'premium', label: '⭐ Premium', desc: 'Hotels · Cab · Restaurants', color: '#0d7377', range: '₹2,000–5,000/day' },
-  { id: 'luxury', label: '👑 Luxury', desc: 'Resorts · Chauffeur · Fine dining', color: '#c9a84c', range: '₹8,000+/day' },
+  { id: 'budget', label: 'Budget', icon: 'luggage', desc: 'Hostels · Auto · Street food', color: '#27ae60', range: '₹500–1,500/day' },
+  { id: 'premium', label: 'Premium', icon: 'star', desc: 'Hotels · Cab · Restaurants', color: '#0d7377', range: '₹2,000–5,000/day' },
+  { id: 'luxury', label: 'Luxury', icon: 'sparkles', desc: 'Resorts · Chauffeur · Fine dining', color: '#c9a84c', range: '₹8,000+/day' },
 ];
 
 const TRAVEL_TYPES = [
-  { id: 'Solo', icon: '🧍' }, { id: 'Couple', icon: '👫' },
-  { id: 'Family', icon: '👨‍👩‍👧' }, { id: 'Friends Group', icon: '👯' },
-  { id: 'Honeymoon', icon: '💑' }, { id: 'Business', icon: '💼' },
+  { id: 'Solo', icon: 'user' }, { id: 'Couple', icon: 'heart' },
+  { id: 'Family', icon: 'family' }, { id: 'Friends Group', icon: 'users' },
+  { id: 'Honeymoon', icon: 'heart' }, { id: 'Business', icon: 'business' },
 ];
 
 const QUICK_DESTS = [
-  { label: 'Taj Mahal', city: 'Agra', icon: '🕌', id: 'taj-mahal-01' },
-  { label: 'Jaipur', city: 'Rajasthan', icon: '🏰', id: 'jaipur-01' },
-  { label: 'Varanasi', city: 'Uttar Pradesh', icon: '🛕', id: 'varanasi-01' },
-  { label: 'Goa Beaches', city: 'Goa', icon: '🏖️', id: 'goa-01' },
-  { label: 'Hampi', city: 'Karnataka', icon: '🏛️', id: 'hampi-01' },
-  { label: 'Rann of Kutch', city: 'Gujarat', icon: '🌅', id: 'kutch-01' },
-  { label: 'Kedarnath', city: 'Uttarakhand', icon: '⛰️', id: 'kedarnath-01' },
-  { label: 'Mysore', city: 'Karnataka', icon: '🏯', id: 'mysore-01' },
+  { label: 'Taj Mahal', city: 'Agra', icon: 'landmark', id: 'taj-mahal-01' },
+  { label: 'Jaipur', city: 'Rajasthan', icon: 'castle', id: 'jaipur-city-05' },
+  { label: 'Varanasi', city: 'Uttar Pradesh', icon: 'landmark', id: 'varanasi-ghats-03' },
+  { label: 'Goa Beaches', city: 'Goa', icon: 'waves', id: 'goa-beaches-22' },
+  { label: 'Hampi', city: 'Karnataka', icon: 'landmark', id: 'hampi-ruins-15' },
+  { label: 'Khajuraho', city: 'Madhya Pradesh', icon: 'landmark', id: 'khajuraho-temples-13' },
+  { label: 'Mysore Palace', city: 'Karnataka', icon: 'castle', id: 'mysore-palace-26' },
+  { label: 'Delhi', city: 'Delhi', icon: 'landmark', id: 'delhi-red-fort-09' },
 ];
 
-/* ── Itinerary engine (self-contained, no external dependency) ── */
-const ITINERARY_TEMPLATES = {
-  'taj-mahal-01': {
-    destination: 'Taj Mahal', city: 'Agra',
-    days: [
-      [
-        { time: '06:00', activity: 'Sunrise at Taj Mahal', type: 'Heritage', icon: '🕌', duration: '2h', notes: 'Arrive early — soft golden light makes it magical' },
-        { time: '09:00', activity: 'Rooftop breakfast with Taj view', type: 'Food', icon: '🥐', duration: '1h' },
-        { time: '10:30', activity: 'Agra Fort (UNESCO)', type: 'Heritage', icon: '🏰', duration: '2h', notes: 'See Taj from the Octagonal Tower' },
-        { time: '13:00', activity: 'Lunch at Pind Balluchi', type: 'Food', icon: '🍛', duration: '1h' },
-        { time: '14:30', activity: 'Fatehpur Sikri Day Trip', type: 'Heritage', icon: '🏛️', duration: '3h', notes: 'Abandoned Mughal capital, 37 km away' },
-        { time: '18:30', activity: 'Sunset from Mehtab Bagh', type: 'Scenic', icon: '🌅', duration: '1h' },
-        { time: '20:00', activity: 'Dinner + Petha shopping', type: 'Food', icon: '🛍️', duration: '2h' },
-      ],
-      [
-        { time: '07:00', activity: 'Taj Mahal interior (mausoleum)', type: 'Heritage', icon: '🕌', duration: '2h' },
-        { time: '09:30', activity: "Itimad-ud-Daulah (Baby Taj)", type: 'Heritage', icon: '🏛️', duration: '1.5h' },
-        { time: '11:30', activity: 'Chini Ka Rauza', type: 'Heritage', icon: '🏛️', duration: '1h' },
-        { time: '13:00', activity: 'Lunch at Pinch of Spice', type: 'Food', icon: '🍽️', duration: '1h' },
-        { time: '14:30', activity: 'Sadar Bazaar Shopping', type: 'Shopping', icon: '🛒', duration: '2h' },
-        { time: '17:00', activity: 'Mohabbat the Taj cultural show', type: 'Culture', icon: '🎭', duration: '2h' },
-        { time: '20:00', activity: 'Farewell dinner at hotel', type: 'Food', icon: '🍷', duration: '1.5h' },
-      ],
-    ],
-  },
-  'jaipur-01': {
-    destination: 'Jaipur', city: 'Jaipur',
-    days: [
-      [
-        { time: '08:00', activity: 'Amber Fort & Palace', type: 'Heritage', icon: '🏰', duration: '3h', notes: 'UNESCO — book elephant or jeep ride in advance' },
-        { time: '12:00', activity: 'Lunch at 1135 AD (Amber Fort)', type: 'Food', icon: '🍛', duration: '1h' },
-        { time: '14:00', activity: 'City Palace Museum', type: 'Heritage', icon: '🏛️', duration: '2h' },
-        { time: '16:30', activity: 'Jantar Mantar Observatory', type: 'Heritage', icon: '🔭', duration: '1h' },
-        { time: '18:00', activity: 'Hawa Mahal (Sunset)', type: 'Heritage', icon: '🏰', duration: '1h' },
-        { time: '19:30', activity: 'Bapu Bazaar Shopping', type: 'Shopping', icon: '🛍️', duration: '1.5h' },
-        { time: '21:00', activity: 'Chokhi Dhani cultural village', type: 'Culture', icon: '🎪', duration: '2h', notes: 'Folk dance + Rajasthani thali dinner' },
-      ],
-      [
-        { time: '07:30', activity: 'Nahargarh Fort sunrise', type: 'Scenic', icon: '🌅', duration: '2h' },
-        { time: '10:00', activity: 'Jaigarh Fort & Jaivana Cannon', type: 'Heritage', icon: '⚔️', duration: '2h' },
-        { time: '12:30', activity: 'Lunch at Suvarna Mahal', type: 'Food', icon: '🍽️', duration: '1h' },
-        { time: '14:00', activity: 'Block Printing Workshop', type: 'Culture', icon: '🎨', duration: '2h' },
-        { time: '16:30', activity: 'Johari Bazaar jewelry shopping', type: 'Shopping', icon: '💍', duration: '2h' },
-        { time: '20:30', activity: 'Dinner at Niros Restaurant', type: 'Food', icon: '🍛', duration: '1.5h' },
-      ],
-    ],
-  },
-  'goa-01': {
-    destination: 'Goa Beaches', city: 'Goa',
-    days: [
-      [
-        { time: '07:00', activity: 'Sunrise at Palolem Beach', type: 'Scenic', icon: '🌅', duration: '1h' },
-        { time: '09:00', activity: 'Breakfast at shack café', type: 'Food', icon: '☕', duration: '1h' },
-        { time: '10:30', activity: 'Old Goa churches & Basilica (UNESCO)', type: 'Heritage', icon: '⛪', duration: '2h' },
-        { time: '13:00', activity: 'Seafood lunch at Fish Thali restaurant', type: 'Food', icon: '🦞', duration: '1h' },
-        { time: '15:00', activity: 'Baga & Calangute beach swim', type: 'Leisure', icon: '🏊', duration: '3h' },
-        { time: '18:30', activity: 'Sunset cruise on Mandovi River', type: 'Scenic', icon: '🚢', duration: '2h' },
-        { time: '21:00', activity: 'Dinner & nightlife at Titos Lane', type: 'Nightlife', icon: '🎉', duration: '2h' },
-      ],
-      [
-        { time: '08:00', activity: 'Dudhsagar Waterfall day trip', type: 'Nature', icon: '🌊', duration: '4h' },
-        { time: '13:00', activity: 'Lunch at Spice Plantation', type: 'Food', icon: '🌶️', duration: '1.5h', notes: 'All-you-can-eat Goan thali' },
-        { time: '15:30', activity: 'Anjuna Flea Market', type: 'Shopping', icon: '🛍️', duration: '2h' },
-        { time: '18:00', activity: 'Vagator Beach sunset', type: 'Scenic', icon: '🌅', duration: '1.5h' },
-        { time: '20:30', activity: 'Dinner at A Reverie Restaurant', type: 'Food', icon: '🍝', duration: '2h' },
-      ],
-    ],
-  },
-  'varanasi-01': {
-    destination: 'Varanasi Ghats', city: 'Varanasi',
-    days: [
-      [
-        { time: '05:00', activity: 'Sunrise boat ride on the Ganges', type: 'Spiritual', icon: '🚣', duration: '2h', notes: 'The most iconic Varanasi experience' },
-        { time: '08:00', activity: 'Breakfast at Blue Lassi Shop', type: 'Food', icon: '🥛', duration: '45m' },
-        { time: '09:30', activity: 'Kashi Vishwanath Temple', type: 'Spiritual', icon: '🛕', duration: '2h', notes: 'One of the 12 Jyotirlingas, sacred for Shiva' },
-        { time: '12:00', activity: 'Street food exploration (Kachori, Chaat)', type: 'Food', icon: '🥙', duration: '1.5h' },
-        { time: '14:00', activity: 'Sarnath — Buddhas first sermon site', type: 'Heritage', icon: '🏛️', duration: '3h' },
-        { time: '18:00', activity: 'Dashashwamedh Ghat Ganga Aarti', type: 'Spiritual', icon: '🔥', duration: '1.5h', notes: 'The grand evening prayer ceremony — unmissable' },
-        { time: '20:30', activity: 'Dinner on rooftop with Ganges view', type: 'Food', icon: '🍛', duration: '1.5h' },
-      ],
-    ],
-  },
-  'hampi-01': {
-    destination: 'Hampi', city: 'Hampi',
-    days: [
-      [
-        { time: '06:30', activity: 'Sunrise from Hemakuta Hill', type: 'Scenic', icon: '🌅', duration: '1.5h' },
-        { time: '08:30', activity: 'Virupaksha Temple complex', type: 'Heritage', icon: '🏛️', duration: '2h' },
-        { time: '11:00', activity: 'Vittala Temple & Stone Chariot (UNESCO)', type: 'Heritage', icon: '🕍', duration: '2.5h', notes: 'The iconic stone chariot — best photo spot' },
-        { time: '14:00', activity: 'Lunch near Hampi Bazaar', type: 'Food', icon: '🍽️', duration: '1h' },
-        { time: '15:30', activity: 'Lotus Mahal & Elephant Stables', type: 'Heritage', icon: '🏯', duration: '2h' },
-        { time: '18:00', activity: 'Coracle ride on Tungabhadra River', type: 'Nature', icon: '🌊', duration: '1h' },
-        { time: '20:00', activity: 'Dinner at Laughing Buddha Café', type: 'Food', icon: '😄', duration: '1.5h' },
-      ],
-    ],
-  },
+/* ── Data-backed itinerary builder ── */
+const CATEGORY_ICONS = {
+  Monument: 'landmark', Fortress: 'castle', Temple: 'landmark', Palace: 'castle',
+  'Religious Site': 'landmark', 'Archaeological Site': 'landmark', Beach: 'waves',
+  'Hill Station': 'mountain', Landmark: 'mapPin', 'Historic Site': 'landmark',
 };
 
-const DEFAULT_DAY = (d, total) => [
-  { time: '08:00', activity: d === 1 ? 'Arrival & Check-in' : d === total ? 'Final morning exploration' : 'Morning heritage tour', type: 'Heritage', icon: '🏛️', duration: '3h', notes: d === 1 ? 'Settle in, rest, explore the neighbourhood' : '' },
-  { time: '12:00', activity: 'Lunch at local restaurant', type: 'Food', icon: '🍽️', duration: '1h' },
-  { time: '14:00', activity: 'Afternoon cultural experience', type: 'Culture', icon: '🎨', duration: '2.5h' },
-  { time: '17:00', activity: 'Evening local market walk', type: 'Leisure', icon: '🛒', duration: '1.5h' },
-  { time: '19:30', activity: 'Sunset viewpoint', type: 'Scenic', icon: '🌅', duration: '1h' },
-  { time: '21:00', activity: d === total ? 'Farewell dinner' : 'Dinner at recommended spot', type: 'Food', icon: '🍛', duration: '1.5h' },
-];
+function getDestinationSites(form) {
+  const selected = sites.find(site => site.id === form.destinationId);
+  const city = selected?.city || form.city;
+  const country = selected?.country;
+  const matchingSites = selected
+    ? sites.filter(site => site.city === city && (!country || site.country === country))
+    : sites.filter(site =>
+        (site.name?.en || '').toLowerCase() === form.destination.toLowerCase() ||
+        site.city?.toLowerCase() === form.destination.toLowerCase()
+      );
+
+  const uniqueSites = new Map();
+  for (const site of [selected, ...matchingSites].filter(Boolean)) {
+    const key = `${site.city}:${(site.name?.en || '').toLowerCase()}`;
+    if (!uniqueSites.has(key)) uniqueSites.set(key, site);
+  }
+  return [...uniqueSites.values()];
+}
 
 function buildItinerary(form) {
   const days = (() => {
@@ -141,16 +61,43 @@ function buildItinerary(form) {
     return Math.max(1, Math.ceil(diff / 86400000));
   })();
 
-  const tmpl = ITINERARY_TEMPLATES[form.destinationId] || null;
+  const destinationSites = getDestinationSites(form);
   const destName = form.destination || 'Your Destination';
-  const cityName = tmpl?.city || form.city || destName;
+  const cityName = destinationSites[0]?.city || form.city || destName;
 
   const itinerary = [];
   for (let d = 1; d <= days; d++) {
-    const templateActivities = tmpl?.days[d - 1] || null;
+    const daySites = destinationSites.slice((d - 1) * 2, d * 2);
+    const activities = daySites.map((site, index) => ({
+      time: index === 0 ? '09:00' : '14:00',
+      activity: `Visit ${site.name?.en || 'Heritage site'}`,
+      type: 'Heritage',
+      icon: CATEGORY_ICONS[site.category] || 'mapPin',
+      duration: site.estimatedDuration || 'Check site guidance',
+      notes: [site.category, site.openingHours, site.visitorTips?.en || site.visitorTips]
+        .filter(Boolean)
+        .join(' · '),
+      siteId: site.id,
+      mapUrl: site.googleMapsLink,
+    }));
+
+    if (activities.length === 2) {
+      activities.splice(1, 0, {
+        time: '12:00', activity: 'Lunch and rest break', type: 'Leisure',
+        icon: 'utensils', duration: '1.5h', notes: 'Choose a nearby meal stop; allow time for local travel.',
+      });
+    }
+    if (activities.length === 0) {
+      activities.push({
+        time: '09:00', activity: 'Unscheduled time / departure buffer',
+        type: 'Leisure', icon: 'luggage', duration: 'Flexible',
+        notes: 'The destination catalog has no additional listed sites for this day. Avoids suggesting unverified attractions.',
+      });
+    }
+
     itinerary.push({
       day: d,
-      activities: templateActivities || DEFAULT_DAY(d, days),
+      activities,
     });
   }
 
@@ -195,7 +142,7 @@ export default function TripPlanner() {
   /* Destination autocomplete */
   const handleDestInput = (val) => {
     setQuery(val);
-    setForm(f => ({ ...f, destination: val }));
+    setForm(f => ({ ...f, destination: val, destinationId: '', city: '' }));
     if (val.length > 1) {
       setSuggestions(
         sites.filter(s =>
@@ -227,7 +174,7 @@ export default function TripPlanner() {
   })();
 
   /* Validation */
-  const step1Valid = form.destination.trim().length > 0;
+  const step1Valid = sites.some(site => site.id === form.destinationId);
   const step2Valid = form.startDate && form.endDate && new Date(form.endDate) > new Date(form.startDate);
 
   /* Generate */
@@ -258,7 +205,7 @@ export default function TripPlanner() {
             background: 'rgba(201,168,76,0.15)', color: '#c9a84c',
             fontSize: '13px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase',
             marginBottom: '16px', border: '1px solid rgba(201,168,76,0.3)',
-          }}>🗺️ AI Trip Planner</span>
+          }}><Icon name="map" size={15} /> AI Trip Planner</span>
           <h1 style={{ fontSize: 'clamp(24px,5vw,38px)', fontWeight: '800', marginBottom: '12px', color: '#fff' }}>
             Plan Your Perfect Heritage Journey
           </h1>
@@ -294,7 +241,7 @@ export default function TripPlanner() {
         {/* ══ STEP 1 — DESTINATION ══════════════════════════════ */}
         {step === 1 && (
           <div style={panelStyle}>
-            <h2 style={panelTitle}>🏛️ Where do you want to go?</h2>
+            <h2 style={panelTitle}><Icon name="landmark" size={21} /> Where do you want to go?</h2>
             <p style={panelSub}>Search any heritage site, city, monument, temple, beach or national park.</p>
 
             {/* Search Box */}
@@ -306,7 +253,7 @@ export default function TripPlanner() {
                 boxShadow: query ? '0 0 0 3px rgba(201,168,76,0.2)' : 'none',
                 transition: 'box-shadow 0.2s',
               }}>
-                <span style={{ fontSize: '18px' }}>🔍</span>
+                <Icon name="search" size={18} />
                 <input
                   type="text"
                   placeholder="e.g. Taj Mahal, Goa, Jaipur, Kedarnath..."
@@ -348,7 +295,7 @@ export default function TripPlanner() {
                       onMouseEnter={e => e.currentTarget.style.background = 'rgba(201,168,76,0.08)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'none'}
                     >
-                      <span style={{ fontSize: '18px' }}>📍</span>
+                      <Icon name="mapPin" size={18} />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: '600', color: '#fff' }}>{s.name?.en}</div>
                         <div style={{ fontSize: '12px', color: '#888' }}>{s.city}, {s.country}</div>
@@ -382,7 +329,7 @@ export default function TripPlanner() {
                     onMouseEnter={e => { if (form.destinationId !== d.id) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
                     onMouseLeave={e => { if (form.destinationId !== d.id) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
                   >
-                    <span style={{ fontSize: '22px' }}>{d.icon}</span>
+                    <Icon name={d.icon} size={21} />
                     <div>
                       <div style={{ fontWeight: '700', fontSize: '13px', color: form.destinationId === d.id ? '#c9a84c' : '#eee' }}>{d.label}</div>
                       <div style={{ fontSize: '11px', color: '#888' }}>{d.city}</div>
@@ -399,11 +346,17 @@ export default function TripPlanner() {
                 background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)',
                 display: 'flex', alignItems: 'center', gap: '10px',
               }}>
-                <span style={{ fontSize: '20px' }}>✅</span>
+                <Icon name="confirmed" size={20} />
                 <span style={{ color: '#c9a84c', fontWeight: '700' }}>
                   {form.destination} {form.city ? `· ${form.city}` : ''} selected
                 </span>
               </div>
+            )}
+
+            {form.destination && !step1Valid && (
+              <p style={{ color: '#e5b95c', fontSize: '13px', margin: '-12px 0 20px' }}>
+                Choose a destination from the suggestions so the itinerary uses verified places in the catalog.
+              </p>
             )}
 
             <button
@@ -420,11 +373,11 @@ export default function TripPlanner() {
         {/* ══ STEP 2 — DATES, GUESTS, BUDGET ══════════════════ */}
         {step === 2 && (
           <div style={panelStyle}>
-            <h2 style={panelTitle}>📅 Plan Your Trip to <em style={{ color: '#c9a84c', fontStyle: 'normal' }}>{form.destination}</em></h2>
+            <h2 style={panelTitle}><Icon name="calendar" size={21} /> Plan Your Trip to <em style={{ color: '#c9a84c', fontStyle: 'normal' }}>{form.destination}</em></h2>
 
             {/* Dates */}
             <div style={sectionStyle}>
-              <h3 style={sectionTitle}>🗓️ Travel Dates</h3>
+              <h3 style={sectionTitle}><Icon name="calendar" size={18} /> Travel Dates</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div>
                   <label style={labelStyle}>Start Date</label>
@@ -449,14 +402,14 @@ export default function TripPlanner() {
                   background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.25)',
                   color: '#c9a84c', fontWeight: '700', fontSize: '14px',
                 }}>
-                  🗓️ {tripDays} day{tripDays !== 1 ? 's' : ''} trip · {form.startDate} → {form.endDate}
+                  <Icon name="calendar" size={15} /> {tripDays} day{tripDays !== 1 ? 's' : ''} trip · {form.startDate} → {form.endDate}
                 </div>
               )}
             </div>
 
             {/* Travelers */}
             <div style={sectionStyle}>
-              <h3 style={sectionTitle}>👥 Travelers</h3>
+              <h3 style={sectionTitle}><Icon name="users" size={18} /> Travelers</h3>
               <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
                 {[{ key: 'adults', label: 'Adults', min: 1, max: 10 }, { key: 'children', label: 'Children', min: 0, max: 8 }].map(({ key, label, min, max }) => (
                   <div key={key} style={{ flex: 1, minWidth: '140px' }}>
@@ -477,7 +430,7 @@ export default function TripPlanner() {
 
             {/* Travel Type */}
             <div style={sectionStyle}>
-              <h3 style={sectionTitle}>🧳 Travel Type</h3>
+              <h3 style={sectionTitle}><Icon name="luggage" size={18} /> Travel Type</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                 {TRAVEL_TYPES.map(t => (
                   <button key={t.id} onClick={() => setForm(f => ({ ...f, travelType: t.id }))}
@@ -488,7 +441,7 @@ export default function TripPlanner() {
                       color: form.travelType === t.id ? '#c9a84c' : '#ccc',
                       fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s',
                     }}>
-                    {t.icon} {t.id}
+                    <Icon name={t.icon} size={16} /> {t.id}
                   </button>
                 ))}
               </div>
@@ -496,7 +449,7 @@ export default function TripPlanner() {
 
             {/* Budget */}
             <div style={sectionStyle}>
-              <h3 style={sectionTitle}>💰 Budget Preference</h3>
+              <h3 style={sectionTitle}><Icon name="payments" size={18} /> Budget Preference</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
                 {BUDGETS.map(b => (
                   <button key={b.id} onClick={() => setForm(f => ({ ...f, budget: b.id }))}
@@ -507,7 +460,7 @@ export default function TripPlanner() {
                       transition: 'all 0.2s',
                     }}>
                     <div style={{ fontSize: '18px', fontWeight: '700', color: form.budget === b.id ? b.color : '#eee', marginBottom: '6px' }}>
-                      {b.label}
+                      <Icon name={b.icon} size={17} /> {b.label}
                     </div>
                     <div style={{ fontSize: '12px', color: '#aaa', marginBottom: '4px' }}>{b.desc}</div>
                     <div style={{ fontSize: '12px', color: form.budget === b.id ? b.color : '#666', fontWeight: '600' }}>{b.range}</div>
@@ -519,7 +472,7 @@ export default function TripPlanner() {
             {/* Validation message */}
             {!step2Valid && form.startDate && (
               <div style={{ padding: '12px 16px', borderRadius: '10px', background: 'rgba(231,76,60,0.1)', border: '1px solid rgba(231,76,60,0.3)', color: '#e74c3c', fontSize: '14px', marginBottom: '16px' }}>
-                ⚠️ Please select a valid end date that is after the start date.
+                <Icon name="warning" size={16} /> Please select a valid end date that is after the start date.
               </div>
             )}
 
@@ -549,7 +502,7 @@ export default function TripPlanner() {
                     }} />
                     Generating your itinerary…
                   </>
-                ) : '✨ Generate My Itinerary →'}
+                ) : <><Icon name="sparkles" size={17} /> Generate My Itinerary →</>}
               </button>
             </div>
           </div>
@@ -563,10 +516,10 @@ export default function TripPlanner() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                 <div>
                   <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>
-                    Your {itinerary.days}-Day Heritage Journey ✨
+                    Your {itinerary.days}-Day Heritage Journey
                   </h2>
                   <p style={{ color: '#aaa', fontSize: '15px', margin: 0 }}>
-                    📍 {itinerary.destination} · 👥 {form.adults} Adults{form.children > 0 ? `, ${form.children} Children` : ''}
+                    <Icon name="mapPin" size={15} /> {itinerary.destination} · <Icon name="users" size={15} /> {form.adults} Adults{form.children > 0 ? `, ${form.children} Children` : ''}
                     · {BUDGETS.find(b => b.id === form.budget)?.label} · {form.travelType}
                   </p>
                 </div>
@@ -575,8 +528,8 @@ export default function TripPlanner() {
                     style={{ padding: '10px 18px', borderRadius: '10px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', color: '#ccc', fontWeight: '600', cursor: 'pointer', fontSize: '14px' }}>
                     ← Modify
                   </button>
-                  <Link to="/hotels" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '10px', fontSize: '14px' }}>🏨 Book Hotel</Link>
-                  <Link to="/flights" style={{ padding: '10px 18px', borderRadius: '10px', background: '#0d7377', color: '#fff', fontWeight: '600', textDecoration: 'none', fontSize: '14px' }}>✈️ Book Flight</Link>
+                  <Link to="/hotels" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '10px', fontSize: '14px' }}><Icon name="hotel" size={16} /> Book Hotel</Link>
+                  <Link to="/flights" style={{ padding: '10px 18px', borderRadius: '10px', background: '#0d7377', color: '#fff', fontWeight: '600', textDecoration: 'none', fontSize: '14px' }}><Icon name="plane" size={16} /> Book Flight</Link>
                 </div>
               </div>
             </div>
@@ -587,7 +540,7 @@ export default function TripPlanner() {
               background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.25)',
             }}>
               <p style={{ color: '#c9a84c', fontWeight: '700', marginBottom: '10px', fontSize: '14px' }}>
-                💡 {BUDGETS.find(b => b.id === form.budget)?.label} Travel Tips:
+                <Icon name="info" size={16} /> {BUDGETS.find(b => b.id === form.budget)?.label} Travel Tips:
               </p>
               <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexWrap: 'wrap', gap: '6px 40px' }}>
                 {itinerary.budgetTips.map((t, i) => (
@@ -599,10 +552,10 @@ export default function TripPlanner() {
             {/* Quick booking bar */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '32px' }}>
               {[
-                { to: `/hotels?destination=${encodeURIComponent(itinerary.city)}`, label: '🏨 Book Hotel' },
-                { to: '/flights', label: '✈️ Search Flights' },
-                { to: '/trains', label: '🚂 Search Trains' },
-                { to: '/local-transport', label: '🚗 Cabs & Rentals' },
+                { to: `/hotels?destination=${encodeURIComponent(itinerary.city)}`, label: 'Book Hotel', icon: 'hotel' },
+                { to: '/flights', label: 'Search Flights', icon: 'plane' },
+                { to: '/trains', label: 'Search Trains', icon: 'train' },
+                { to: '/local-transport', label: 'Cabs & Rentals', icon: 'car' },
               ].map(btn => (
                 <Link key={btn.to} to={btn.to}
                   style={{
@@ -613,7 +566,7 @@ export default function TripPlanner() {
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,168,76,0.15)'; e.currentTarget.style.color = '#c9a84c'; }}
                   onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#ddd'; }}
                 >
-                  {btn.label}
+                  <Icon name={btn.icon} size={16} /> {btn.label}
                 </Link>
               ))}
             </div>
@@ -684,20 +637,31 @@ export default function TripPlanner() {
 
                               <div style={{ flex: 1 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '4px' }}>
-                                  <span style={{ fontSize: '16px' }}>{act.icon}</span>
-                                  <span style={{ color: '#fff', fontWeight: '700', fontSize: '15px' }}>{act.activity}</span>
+                                  <Icon name={act.icon} size={17} />
+                                  {act.siteId ? (
+                                    <Link to={`/site/${act.siteId}`} style={{ color: '#fff', fontWeight: '700', fontSize: '15px', textDecoration: 'none' }}>
+                                      {act.activity}
+                                    </Link>
+                                  ) : (
+                                    <span style={{ color: '#fff', fontWeight: '700', fontSize: '15px' }}>{act.activity}</span>
+                                  )}
                                   <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '20px', background: `${TYPE_COLORS[act.type] || TYPE_COLORS.default}22`, color: TYPE_COLORS[act.type] || TYPE_COLORS.default, fontWeight: '600', border: `1px solid ${TYPE_COLORS[act.type] || TYPE_COLORS.default}44` }}>
                                     {act.type}
                                   </span>
                                 </div>
                                 <div style={{ display: 'flex', gap: '12px', color: '#888', fontSize: '13px' }}>
-                                  <span>🕐 {act.time}</span>
-                                  <span>⏱ {act.duration}</span>
+                                  <span><Icon name="clock" size={14} /> {act.time}</span>
+                                  <span><Icon name="timer" size={14} /> {act.duration}</span>
                                 </div>
                                 {act.notes && (
                                   <div style={{ marginTop: '6px', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', color: '#aaa', fontSize: '13px', borderLeft: '3px solid rgba(201,168,76,0.5)' }}>
-                                    💡 {act.notes}
+                                    <Icon name="info" size={14} /> {act.notes}
                                   </div>
+                                )}
+                                {act.mapUrl && (
+                                  <a href={act.mapUrl} target="_blank" rel="noreferrer" style={{ display: 'inline-block', marginTop: '8px', color: '#c9a84c', fontSize: '12px', fontWeight: '700', textDecoration: 'none' }}>
+                                    <Icon name="mapPin" size={14} /> Open map
+                                  </a>
                                 )}
                               </div>
                             </div>
@@ -713,13 +677,13 @@ export default function TripPlanner() {
             {/* Footer */}
             <div style={{ textAlign: 'center', marginTop: '40px', padding: '32px', borderRadius: '16px', background: 'rgba(201,168,76,0.06)', border: '1px solid rgba(201,168,76,0.2)' }}>
               <p style={{ color: '#aaa', marginBottom: '16px', fontSize: '15px' }}>
-                🎉 Your itinerary is ready! Save it to your dashboard or start booking.
+                <Icon name="celebration" size={17} /> Your itinerary is ready! Save it to your dashboard or start booking.
               </p>
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link to="/dashboard" className="btn btn-primary" style={{ borderRadius: '12px' }}>📊 View Dashboard →</Link>
+                <Link to="/dashboard" className="btn btn-primary" style={{ borderRadius: '12px' }}><Icon name="layoutDashboard" size={16} /> View Dashboard →</Link>
                 <button onClick={() => { setStep(1); setItinerary(null); setForm(f => ({ ...f, destination: '', destinationId: '', city: '' })); setQuery(''); }}
                   style={{ padding: '12px 20px', borderRadius: '12px', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', color: '#ccc', fontWeight: '600', cursor: 'pointer' }}>
-                  🔄 Plan Another Trip
+                  <Icon name="activity" size={16} /> Plan Another Trip
                 </button>
               </div>
             </div>

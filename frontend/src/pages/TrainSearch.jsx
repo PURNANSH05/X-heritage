@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { STATIONS, searchTrains, COACH_TYPES } from '../data/trainData.js';
 import TrainCard from '../components/TrainCard.jsx';
 import BookingModal from '../components/BookingModal.jsx';
+import Icon from '../components/Icon.jsx';
 
 export default function TrainSearch() {
   const today = new Date().toISOString().split('T')[0];
@@ -31,7 +32,7 @@ export default function TrainSearch() {
     <section className="section flight-page">
       <div className="container">
         <div className="flights-hero">
-          <h1>🚂 Book Trains</h1>
+          <h1><Icon name="train" size={24} /> Book Trains</h1>
           <p>Search & book trains across India — Rajdhani, Shatabdi, Express & more</p>
         </div>
 
@@ -66,7 +67,7 @@ export default function TrainSearch() {
               onClick={handleSearch}
               disabled={searching || form.from === form.to}
             >
-              {searching ? <><span className="login-spinner" /> Searching…</> : '🔍 Search Trains'}
+              {searching ? <><span className="login-spinner" /> Searching…</> : <><Icon name="search" size={16} /> Search Trains</>}
             </button>
           </div>
         </div>

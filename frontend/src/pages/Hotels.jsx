@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { searchHotels } from '../data/hotelData.js';
 import HotelCard from '../components/HotelCard.jsx';
 import BookingModal from '../components/BookingModal.jsx';
+import Icon from '../components/Icon.jsx';
 import { useSearchParams } from 'react-router-dom';
 
 const CATEGORIES = ['All', 'Luxury', 'Premium', 'Budget', 'Boutique', 'Resort', 'Hostel', 'Heritage'];
@@ -66,7 +67,7 @@ export default function Hotels() {
       <div className="container">
         {/* Header */}
         <div className="flights-hero hotels-hero">
-          <h1>🏨 Find & Book Hotels</h1>
+          <h1><Icon name="hotel" size={24} /> Find & Book Hotels</h1>
           <p>Discover handpicked hotels near India's most iconic heritage destinations</p>
         </div>
 
@@ -111,7 +112,7 @@ export default function Hotels() {
               onClick={handleSearch}
               disabled={searching}
             >
-              {searching ? <><span className="login-spinner" /> Searching…</> : '🔍 Search Hotels'}
+              {searching ? <><span className="login-spinner" /> Searching…</> : <><Icon name="search" size={16} /> Search Hotels</>}
             </button>
           </div>
 
@@ -123,7 +124,7 @@ export default function Hotels() {
                 className={`hotel-cat-pill ${form.category === cat ? 'active' : ''}`}
                 onClick={() => setForm(f => ({ ...f, category: cat }))}
               >
-                {cat === 'Luxury' ? '👑' : cat === 'Budget' ? '🎒' : cat === 'Resort' ? '🌴' : cat === 'Heritage' ? '🏰' : cat === 'Hostel' ? '🛏️' : ''} {cat}
+                {cat === 'Luxury' ? <Icon name="sparkles" size={15} /> : cat === 'Budget' ? <Icon name="luggage" size={15} /> : cat === 'Resort' ? <Icon name="waves" size={15} /> : cat === 'Heritage' ? <Icon name="castle" size={15} /> : cat === 'Hostel' ? <Icon name="bed" size={15} /> : null} {cat}
               </button>
             ))}
           </div>
@@ -184,7 +185,7 @@ export default function Hotels() {
             <div className="modal-box hotel-detail-modal" onClick={e => e.stopPropagation()}>
               <div className="modal-header">
                 <h2>{selectedHotel.name}</h2>
-                <button className="modal-close-btn" onClick={() => setSelectedHotel(null)}>✕</button>
+                <button className="modal-close-btn" onClick={() => setSelectedHotel(null)} aria-label="Close hotel details"><Icon name="close" /></button>
               </div>
               <div className="modal-body">
                 <img src={selectedHotel.image} alt={selectedHotel.name} style={{ width: '100%', borderRadius: 12, marginBottom: 16 }} onError={e => e.target.style.display = 'none'} />
@@ -196,7 +197,7 @@ export default function Hotels() {
                       <div>
                         <strong>{rt.name}</strong>
                         <p style={{ fontSize: 13, color: '#666' }}>{rt.description}</p>
-                        <span style={{ fontSize: 12 }}>👥 Up to {rt.capacity} guests</span>
+                        <span style={{ fontSize: 12 }}><Icon name="users" size={14} /> Up to {rt.capacity} guests</span>
                       </div>
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontWeight: 700, color: 'var(--teal)', fontSize: 18 }}>

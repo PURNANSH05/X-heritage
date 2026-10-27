@@ -1,6 +1,7 @@
 /* TrainCard.jsx — Train search result card */
 import { useState } from 'react';
 import { formatPrice } from '../services/bookingService.js';
+import Icon from './Icon.jsx';
 
 const CLASS_COLORS = { '1A': '#c9a84c', '2A': '#0d7377', '3A': '#1a1a2e', SL: '#666', CC: '#555', EC: '#9b59b6' };
 
@@ -28,7 +29,7 @@ export default function TrainCard({ train, onBook }) {
           <span className="train-type-badge">{train.type}</span>
           <div className="train-name">{train.name}</div>
           <div className="train-number">#{train.number}</div>
-          <div className="train-run-days">🗓 {train.runDays}</div>
+          <div className="train-run-days"><Icon name="calendar" size={15} /> {train.runDays}</div>
         </div>
 
         {/* Route */}
@@ -41,7 +42,7 @@ export default function TrainCard({ train, onBook }) {
             <div className="flight-route-track">
               <div className="flight-route-dot" />
               <div className="flight-route-dashes" />
-              <span className="flight-route-plane">🚂</span>
+              <span className="flight-route-plane"><Icon name="train" size={18} /></span>
               <div className="flight-route-dashes" />
               <div className="flight-route-dot" />
             </div>
@@ -62,6 +63,7 @@ export default function TrainCard({ train, onBook }) {
                 className={`train-class-tab ${selectedClass === cls ? 'active' : ''}`}
                 style={selectedClass === cls ? { '--cls-color': CLASS_COLORS[cls] || '#0d7377' } : {}}
                 onClick={() => setSelectedClass(cls)}
+                aria-pressed={selectedClass === cls}
               >
                 {cls}
               </button>
@@ -81,8 +83,8 @@ export default function TrainCard({ train, onBook }) {
           >
             {avail?.status === 'WL' ? 'Book Waitlist' : 'Book Now'}
           </button>
-          <button className="flight-details-toggle" onClick={() => setExpanded(v => !v)}>
-            {expanded ? 'Hide details ▲' : 'View details ▼'}
+          <button type="button" className="flight-details-toggle" onClick={() => setExpanded(v => !v)} aria-expanded={expanded}>
+            {expanded ? <>Hide details <Icon name="chevronUp" size={14} /></> : <>View details <Icon name="chevronDown" size={14} /></>}
           </button>
         </div>
       </div>

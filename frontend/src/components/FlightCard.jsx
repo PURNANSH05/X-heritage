@@ -1,6 +1,7 @@
 /* FlightCard.jsx — Flight result card */
 import { useState } from 'react';
 import PriceTag from './PriceTag.jsx';
+import Icon from './Icon.jsx';
 
 export default function FlightCard({ flight, onBook }) {
   const [expanded, setExpanded] = useState(false);
@@ -10,7 +11,7 @@ export default function FlightCard({ flight, onBook }) {
       <div className="flight-card-main">
         {/* Airline */}
         <div className="flight-airline">
-          <span className="flight-airline-logo">{flight.airlineLogo}</span>
+          <span className="flight-airline-logo"><Icon name={flight.airlineLogo || 'plane'} size={20} /></span>
           <div>
             <div className="flight-airline-name">{flight.airline}</div>
             <div className="flight-number">{flight.flightNumber}</div>
@@ -28,7 +29,7 @@ export default function FlightCard({ flight, onBook }) {
             <div className="flight-route-track">
               <div className="flight-route-dot" />
               <div className="flight-route-dashes" />
-              <span className="flight-route-plane">✈</span>
+              <span className="flight-route-plane"><Icon name="plane" size={17} /></span>
               <div className="flight-route-dashes" />
               <div className="flight-route-dot" />
             </div>
@@ -44,7 +45,7 @@ export default function FlightCard({ flight, onBook }) {
         <div className="flight-price-col">
           <PriceTag amount={flight.price} label={`per person`} size="lg" highlight />
           {flight.seatsUrgent && (
-            <span className="flight-seats-urgent">⚡ {flight.seatsLabel}</span>
+            <span className="flight-seats-urgent"><Icon name="sparkles" size={14} /> {flight.seatsLabel}</span>
           )}
           <button
             className="btn btn-primary flight-book-btn"
@@ -55,8 +56,9 @@ export default function FlightCard({ flight, onBook }) {
           <button
             className="flight-details-toggle"
             onClick={() => setExpanded(v => !v)}
+            aria-expanded={expanded}
           >
-            {expanded ? 'Hide details ▲' : 'View details ▼'}
+            {expanded ? <>Hide details <Icon name="chevronUp" size={14} /></> : <>View details <Icon name="chevronDown" size={14} /></>}
           </button>
         </div>
       </div>
@@ -76,7 +78,7 @@ export default function FlightCard({ flight, onBook }) {
             <div className="flight-detail-item">
               <span className="flight-detail-label">Refundable</span>
               <span className={flight.refundable ? 'text-green' : 'text-red'}>
-                {flight.refundable ? '✓ Refundable' : '✕ Non-refundable'}
+                {flight.refundable ? <><Icon name="check" size={14} /> Refundable</> : <><Icon name="close" size={14} /> Non-refundable</>}
               </span>
             </div>
             <div className="flight-detail-item">

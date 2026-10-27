@@ -3,6 +3,7 @@ import { useState } from 'react';
 import StarRating from './StarRating.jsx';
 import PriceTag from './PriceTag.jsx';
 import { HOTEL_AMENITIES } from '../data/hotelData.js';
+import Icon from './Icon.jsx';
 
 export default function HotelCard({ hotel, onBook, onView }) {
   const [imgError, setImgError] = useState(false);
@@ -23,17 +24,19 @@ export default function HotelCard({ hotel, onBook, onView }) {
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="hotel-card-image-placeholder">🏨</div>
+          <div className="hotel-card-image-placeholder"><Icon name="hotel" size={36} /></div>
         )}
-        {hotel.featured && <span className="hotel-featured-badge">⭐ Featured</span>}
-        <span className="hotel-stars-overlay">{'⭐'.repeat(hotel.stars)}</span>
+        {hotel.featured && <span className="hotel-featured-badge"><Icon name="star" size={14} /> Featured</span>}
+        <span className="hotel-stars-overlay" aria-label={`${hotel.stars} star hotel`}>
+          {Array.from({ length: hotel.stars }, (_, index) => <Icon key={index} name="star" size={13} />)}
+        </span>
       </div>
 
       <div className="hotel-card-body">
         <div className="hotel-card-header">
           <div>
             <h3 className="hotel-card-name">{hotel.name}</h3>
-            <p className="hotel-card-location">📍 {hotel.distanceFromAttr}</p>
+            <p className="hotel-card-location"><Icon name="mapPin" size={15} /> {hotel.distanceFromAttr}</p>
           </div>
           <span className={`hotel-category-tag hotel-cat-${hotel.category?.toLowerCase()}`}>
             {hotel.category}
@@ -49,7 +52,7 @@ export default function HotelCard({ hotel, onBook, onView }) {
             const a = HOTEL_AMENITIES[key];
             return a ? (
               <span key={key} className="hotel-amenity-chip" title={a.label}>
-                {a.icon} {a.label}
+                <Icon name={a.icon} size={15} /> {a.label}
               </span>
             ) : null;
           })}
@@ -79,9 +82,9 @@ export default function HotelCard({ hotel, onBook, onView }) {
 
         <div className="hotel-cancellation">
           {hotel.cancellation?.includes('Free') ? (
-            <span className="hotel-free-cancel">✓ {hotel.cancellation}</span>
+              <span className="hotel-free-cancel"><Icon name="check" size={14} /> {hotel.cancellation}</span>
           ) : (
-            <span className="hotel-no-cancel">⚠ {hotel.cancellation}</span>
+            <span className="hotel-no-cancel"><Icon name="warning" size={14} /> {hotel.cancellation}</span>
           )}
         </div>
       </div>

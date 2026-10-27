@@ -1,5 +1,6 @@
 /* Privacy.jsx — HeritageX Privacy Policy */
 import { Link } from 'react-router-dom';
+import Icon from '../components/Icon.jsx';
 
 export default function Privacy() {
   return (
@@ -11,7 +12,7 @@ export default function Privacy() {
 
         <div style={{ background: '#fff', borderRadius: 20, padding: '40px 48px', boxShadow: '0 2px 20px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8 }}>
-            <span style={{ fontSize: 36 }}>🔒</span>
+            <Icon name="lock" size={34} />
             <div>
               <h1 style={{ margin: 0, fontSize: 26, fontWeight: 900 }}>Privacy Policy</h1>
               <p style={{ margin: 0, color: '#64748b', fontSize: 13 }}>Last updated: June 28, 2026</p>
@@ -114,9 +115,9 @@ We respond to all privacy requests within 7 business days.`,
           ))}
 
           <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 24, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <Link to="/security" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13 }}>🛡️ Security Center</Link>
-            <Link to="/terms" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}>📄 Terms of Service</Link>
-            <a href="mailto:privacy@heritagex.com" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}>📧 Contact DPO</a>
+            <Link to="/security" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13 }}><Icon name="shield" size={15} /> Security Center</Link>
+            <Link to="/terms" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}><Icon name="document" size={15} /> Terms of Service</Link>
+            <a href="mailto:privacy@heritagex.com" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}><Icon name="mail" size={15} /> Contact DPO</a>
           </div>
         </div>
       </div>

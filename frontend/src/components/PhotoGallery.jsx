@@ -1,6 +1,6 @@
 import SmartImage from './SmartImage.jsx';
 
-export default function PhotoGallery({ photos, onPick }) {
+export default function PhotoGallery({ photos, onPick, site }) {
   return (
     <div className="photo-gallery">
       {photos.map((photo, index) => (
@@ -15,6 +15,7 @@ export default function PhotoGallery({ photos, onPick }) {
             fallback={typeof photo === 'string' ? photo : photo?.fallback}
             alt={typeof photo === 'string' ? `Gallery view ${index + 1}` : photo?.alt || `Gallery view ${index + 1}`}
             className="photo-tile-image"
+            site={site}
           />
         </button>
       ))}

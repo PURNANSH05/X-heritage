@@ -4,6 +4,7 @@ import { getAllBookings, formatPrice, getBookingTypeLabel } from '../services/bo
 import { useAuth } from '../context/AuthContext.jsx';
 import StatusBadge from '../components/StatusBadge.jsx';
 import { sites } from '../data/sites.js';
+import Icon from '../components/Icon.jsx';
 
 const ADMIN_TABS = ['Overview', 'Bookings', 'Destinations', 'Users', 'Analytics'];
 
@@ -40,7 +41,7 @@ export default function AdminPanel() {
     return (
       <section className="section">
         <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
-          <div style={{ fontSize: 64 }}>🔐</div>
+          <div><Icon name="lock" size={56} /></div>
           <h2>Admin Access Required</h2>
           <p>You need admin privileges to access this panel.</p>
           <p style={{ color: '#666', marginTop: 8 }}>Login with <code>demo@heritagex.com</code> to access admin features.</p>
@@ -82,7 +83,7 @@ export default function AdminPanel() {
       <div className="container">
         <div className="admin-header">
           <div>
-            <h1>⚙️ Admin Panel</h1>
+            <h1><Icon name="settings" size={24} /> Admin Panel</h1>
             <p>Platform management and analytics</p>
           </div>
           <div className="admin-header-badge">
@@ -98,11 +99,11 @@ export default function AdminPanel() {
               className={`dashboard-tab ${activeTab === tab ? 'active' : ''}`}
               onClick={() => setActiveTab(tab)}
             >
-              {tab === 'Overview' && '📊'}
-              {tab === 'Bookings' && '📋'}
-              {tab === 'Destinations' && '🏛️'}
-              {tab === 'Users' && '👥'}
-              {tab === 'Analytics' && '📈'}
+              {tab === 'Overview' && <Icon name="layoutDashboard" size={16} />}
+              {tab === 'Bookings' && <Icon name="clipboard" size={16} />}
+              {tab === 'Destinations' && <Icon name="landmark" size={16} />}
+              {tab === 'Users' && <Icon name="users" size={16} />}
+              {tab === 'Analytics' && <Icon name="activity" size={16} />}
               {' '}{tab}
             </button>
           ))}
@@ -113,42 +114,42 @@ export default function AdminPanel() {
           <>
             <div className="admin-stats-grid">
               <div className="admin-stat-card stat-blue">
-                <span className="admin-stat-icon">📋</span>
+                <span className="admin-stat-icon"><Icon name="clipboard" /></span>
                 <div>
                   <strong>{stats.totalBookings}</strong>
                   <span>Total Bookings</span>
                 </div>
               </div>
               <div className="admin-stat-card stat-green">
-                <span className="admin-stat-icon">✅</span>
+                <span className="admin-stat-icon"><Icon name="confirmed" /></span>
                 <div>
                   <strong>{stats.confirmedBookings}</strong>
                   <span>Confirmed</span>
                 </div>
               </div>
               <div className="admin-stat-card stat-gold">
-                <span className="admin-stat-icon">💰</span>
+                <span className="admin-stat-icon"><Icon name="payments" /></span>
                 <div>
                   <strong>{formatPrice(stats.totalRevenue)}</strong>
                   <span>Total Revenue</span>
                 </div>
               </div>
               <div className="admin-stat-card stat-navy">
-                <span className="admin-stat-icon">🏛️</span>
+                <span className="admin-stat-icon"><Icon name="landmark" /></span>
                 <div>
                   <strong>{stats.totalDestinations}</strong>
                   <span>Destinations</span>
                 </div>
               </div>
               <div className="admin-stat-card stat-purple">
-                <span className="admin-stat-icon">👥</span>
+                <span className="admin-stat-icon"><Icon name="users" /></span>
                 <div>
                   <strong>{Math.max(stats.uniqueUsers, 1)}</strong>
                   <span>Active Users</span>
                 </div>
               </div>
               <div className="admin-stat-card stat-teal">
-                <span className="admin-stat-icon">⭐</span>
+                <span className="admin-stat-icon"><Icon name="star" /></span>
                 <div>
                   <strong>4.7</strong>
                   <span>Avg Rating</span>
@@ -318,11 +319,11 @@ export default function AdminPanel() {
           <div className="admin-analytics-section">
             <div className="admin-charts-row">
               <div className="admin-chart-card">
-                <h3>📊 Booking Distribution</h3>
+                <h3><Icon name="layoutDashboard" size={17} /> Booking Distribution</h3>
                 <BarChart data={chartData} />
               </div>
               <div className="admin-chart-card">
-                <h3>📈 Revenue Trend (2026)</h3>
+                <h3><Icon name="activity" size={17} /> Revenue Trend (2026)</h3>
                 <BarChart data={monthlyRevenue} />
               </div>
             </div>

@@ -11,6 +11,7 @@ import ReviewCard from '../components/ReviewCard.jsx';
 import SmartImage from '../components/SmartImage.jsx';
 import ImageLightbox from '../components/ImageLightbox.jsx';
 import { fetchSite } from '../services/siteService.js';
+import { fetchPlaceThumbnails } from '../services/placeImageService.js';
 import { readFavorites, toggleFavorite } from '../utils/favorites.js';
 
 const tabs = ['Overview', 'Full History', 'Visitor Tips', 'Details'];
@@ -48,6 +49,26 @@ export default function SiteDetail() {
       active = false;
     };
   }, [siteId, fallbackSite]);
+
+  useEffect(() => {
+    if (!site || site.heroImage && !site.heroImage.startsWith('data:image/svg+xml')) return undefined;
+
+    let active = true;
+    fetchPlaceThumbnails([fallbackSite]).then((thumbnails) => {
+      const thumbnail = thumbnails.get(fallbackSite.id);
+      if (!active || !thumbnail) return;
+
+      setSite((current) => current?.id === fallbackSite.id ? {
+        ...current,
+        heroImage: thumbnail,
+        photos: [{ title: `${current.name?.en || 'Destination'} photo`, url: thumbnail }, ...(current.photos || [])]
+      } : current);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [site, fallbackSite]);
 
   useEffect(() => {
     if (!site) return;
@@ -112,7 +133,7 @@ export default function SiteDetail() {
     <section className="section">
       <div className="container">
         <div className="detail-hero" onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }} style={{ cursor: 'zoom-in', position: 'relative' }}>
-          <SmartImage src={heroImage} fallback={heroFallback} alt={site.name?.en || 'Site hero'} className="detail-hero-image" />
+          <SmartImage src={heroImage} fallback={heroFallback} alt={site.name?.en || 'Site hero'} className="detail-hero-image" site={site} />
           <div className="detail-hero-image-overlay" />
           <div className="view-fullscreen-badge">
             <Maximize2 size={14} /> View Fullscreen
@@ -268,7 +289,7 @@ export default function SiteDetail() {
             <h2 style={{ marginTop: '40px', marginBottom: '20px' }}>Photo Gallery</h2>
             {site.photos && site.photos.length > 0 ? (
               <>
-                <PhotoGallery photos={site.photos} onPick={(index) => setGalleryIndex(index)} />
+                <PhotoGallery photos={site.photos} site={site} onPick={(index) => setGalleryIndex(index)} />
                 <div
                   className="gallery-preview"
                   onClick={() => {
@@ -283,6 +304,7 @@ export default function SiteDetail() {
                     fallback={imagePreviewFallback}
                     alt={site.name?.en || 'Site preview'}
                     className="gallery-preview-image"
+                    site={site}
                   />
                   <div className="gallery-preview-zoom-overlay">
                     <Maximize2 size={20} />
@@ -358,6 +380,7 @@ export default function SiteDetail() {
         isOpen={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
         photos={allPhotos}
+        site={site}
         currentIndex={lightboxIndex}
         onChangeIndex={setLightboxIndex}
       />

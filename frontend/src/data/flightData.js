@@ -23,13 +23,13 @@ export const AIRPORTS = [
 ];
 
 export const AIRLINES = [
-  { code: 'AI', name: 'Air India', logo: '🇮🇳', color: '#e31837', rating: 4.1 },
-  { code: '6E', name: 'IndiGo', logo: '🔵', color: '#0051a5', rating: 4.3 },
-  { code: 'SG', name: 'SpiceJet', logo: '🌶️', color: '#e31837', rating: 3.9 },
-  { code: 'UK', name: 'Vistara', logo: '✈️', color: '#6b2d90', rating: 4.5 },
-  { code: 'G8', name: 'GoAir', logo: '🟠', color: '#ff6600', rating: 3.8 },
-  { code: 'I5', name: 'Air Asia India', logo: '🔴', color: '#ff0000', rating: 4.0 },
-  { code: '9W', name: 'Jet Airways', logo: '🟡', color: '#f5a623', rating: 4.2 },
+  { code: 'AI', name: 'Air India', logo: 'plane', color: '#e31837', rating: 4.1 },
+  { code: '6E', name: 'IndiGo', logo: 'plane', color: '#0051a5', rating: 4.3 },
+  { code: 'SG', name: 'SpiceJet', logo: 'plane', color: '#e31837', rating: 3.9 },
+  { code: 'UK', name: 'Vistara', logo: 'plane', color: '#6b2d90', rating: 4.5 },
+  { code: 'G8', name: 'GoAir', logo: 'plane', color: '#ff6600', rating: 3.8 },
+  { code: 'I5', name: 'Air Asia India', logo: 'plane', color: '#ff0000', rating: 4.0 },
+  { code: '9W', name: 'Jet Airways', logo: 'plane', color: '#f5a623', rating: 4.2 },
 ];
 
 const SEAT_CLASSES = ['Economy', 'Premium Economy', 'Business', 'First Class'];

@@ -3,14 +3,15 @@ import { useState } from 'react';
 import { createBooking, formatPrice } from '../services/bookingService.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { openTicketPrintWindow } from '../utils/ticketGenerator.js';
+import Icon from './Icon.jsx';
 
 
 const PAYMENT_METHODS = [
-  { id: 'upi', label: 'UPI', icon: '📲', options: ['Google Pay', 'PhonePe', 'Paytm', 'BHIM'] },
-  { id: 'card', label: 'Credit / Debit Card', icon: '💳', options: [] },
-  { id: 'netbanking', label: 'Net Banking', icon: '🏦', options: ['SBI', 'HDFC', 'ICICI', 'Axis', 'Kotak'] },
-  { id: 'wallet', label: 'Wallet', icon: '👛', options: ['Paytm', 'Amazon Pay', 'Mobikwik'] },
-  { id: 'emi', label: 'EMI', icon: '📅', options: ['No Cost EMI available'] },
+  { id: 'upi', label: 'UPI', icon: 'phone', options: ['Google Pay', 'PhonePe', 'Paytm', 'BHIM'] },
+  { id: 'card', label: 'Credit / Debit Card', icon: 'card', options: [] },
+  { id: 'netbanking', label: 'Net Banking', icon: 'bank', options: ['SBI', 'HDFC', 'ICICI', 'Axis', 'Kotak'] },
+  { id: 'wallet', label: 'Wallet', icon: 'wallet', options: ['Paytm', 'Amazon Pay', 'Mobikwik'] },
+  { id: 'emi', label: 'EMI', icon: 'calendar', options: ['No Cost EMI available'] },
 ];
 
 export default function BookingModal({ isOpen, onClose, bookingType, bookingDetails, onSuccess }) {
@@ -43,16 +44,16 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
 
   return (
     <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="modal-box booking-modal">
+      <div className="modal-box booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
         {/* Header */}
         <div className="modal-header">
-          <h2 className="modal-title">
-            {step === 1 && '📋 Review Booking'}
-            {step === 2 && '💳 Secure Payment'}
-            {step === 3 && '✅ Booking Confirmed!'}
+          <h2 className="modal-title" id="booking-modal-title">
+            {step === 1 && <><Icon name="clipboard" /> Review Booking</>}
+            {step === 2 && <><Icon name="card" /> Secure Payment</>}
+            {step === 3 && <><Icon name="confirmed" /> Booking Confirmed!</>}
           </h2>
           {step !== 3 && (
-            <button className="modal-close-btn" onClick={onClose}>✕</button>
+            <button type="button" className="modal-close-btn" onClick={onClose} aria-label="Close booking"><Icon name="close" /></button>
           )}
         </div>
 
@@ -60,7 +61,7 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
         <div className="booking-steps">
           {['Review', 'Payment', 'Confirmed'].map((label, idx) => (
             <div key={label} className={`booking-step ${step > idx ? 'done' : ''} ${step === idx + 1 ? 'active' : ''}`}>
-              <div className="booking-step-circle">{step > idx + 1 ? '✓' : idx + 1}</div>
+              <div className="booking-step-circle">{step > idx + 1 ? <Icon name="check" size={15} /> : idx + 1}</div>
               <span>{label}</span>
             </div>
           ))}
@@ -89,8 +90,8 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
               <span>Total Amount</span>
               <strong>{formatPrice(bookingDetails.price || bookingDetails.totalPrice || 0)}</strong>
             </div>
-            <button className="btn btn-primary booking-continue-btn" onClick={() => setStep(2)}>
-              Continue to Payment →
+            <button type="button" className="btn btn-primary booking-continue-btn" onClick={() => setStep(2)}>
+              Continue to Payment <Icon name="arrowRight" size={16} />
             </button>
           </div>
         )}
@@ -101,11 +102,13 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
             <div className="payment-methods">
               {PAYMENT_METHODS.map(m => (
                 <button
+                  type="button"
                   key={m.id}
                   className={`payment-method-tab ${payMethod === m.id ? 'active' : ''}`}
+                  aria-pressed={payMethod === m.id}
                   onClick={() => { setPayMethod(m.id); setPayOption(''); }}
                 >
-                  <span>{m.icon}</span>
+                  <Icon name={m.icon} />
                   <span>{m.label}</span>
                 </button>
               ))}
@@ -117,8 +120,10 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
                   <div className="payment-upi-apps">
                     {selectedMethod.options.map(opt => (
                       <button
+                        type="button"
                         key={opt}
                         className={`upi-app-btn ${payOption === opt ? 'active' : ''}`}
+                        aria-pressed={payOption === opt}
                         onClick={() => setPayOption(opt)}
                       >{opt}</button>
                     ))}
@@ -173,9 +178,11 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
               {(payMethod === 'netbanking' || payMethod === 'wallet') && (
                 <div className="payment-options-grid">
                   {selectedMethod.options.map(opt => (
-                    <button
+                      <button
+                        type="button"
                       key={opt}
                       className={`payment-option-btn ${payOption === opt ? 'active' : ''}`}
+                        aria-pressed={payOption === opt}
                       onClick={() => setPayOption(opt)}
                     >{opt}</button>
                   ))}
@@ -184,12 +191,14 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
 
               {payMethod === 'emi' && (
                 <div className="payment-emi-info">
-                  <p>🎉 No Cost EMI available on select credit cards</p>
+                  <p><Icon name="celebration" size={16} /> No Cost EMI available on select credit cards</p>
                   <div className="payment-options-grid">
                     {['3 months', '6 months', '9 months', '12 months'].map(opt => (
                       <button
+                        type="button"
                         key={opt}
                         className={`payment-option-btn ${payOption === opt ? 'active' : ''}`}
+                        aria-pressed={payOption === opt}
                         onClick={() => setPayOption(opt)}
                       >{opt}</button>
                     ))}
@@ -199,7 +208,7 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
             </div>
 
             <div className="payment-security-note">
-              🔒 256-bit SSL encryption · PCI DSS compliant · Your data is safe
+              <Icon name="lock" size={15} /> 256-bit SSL encryption · PCI DSS compliant · Your data is safe
             </div>
 
             <div className="booking-total-bar">
@@ -208,7 +217,7 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
             </div>
 
             <div className="payment-actions">
-              <button className="btn btn-secondary" onClick={() => setStep(1)}>← Back</button>
+              <button type="button" className="btn btn-secondary" onClick={() => setStep(1)}><Icon name="arrowLeft" size={16} /> Back</button>
               <button
                 className={`btn btn-primary booking-pay-btn ${processing ? 'loading' : ''}`}
                 onClick={handlePayment}
@@ -217,7 +226,7 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
                 {processing ? (
                   <><span className="login-spinner" /> Processing Payment…</>
                 ) : (
-                  `Pay ${formatPrice(bookingDetails.price || bookingDetails.totalPrice || 0)} →`
+                  <>Pay {formatPrice(bookingDetails.price || bookingDetails.totalPrice || 0)} <Icon name="arrowRight" size={16} /></>
                 )}
               </button>
             </div>
@@ -236,12 +245,12 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
                 display: 'flex', alignItems: 'center', gap: '10px',
                 fontSize: '14px', fontWeight: '700', animation: 'slideInRight 0.4s ease',
               }}>
-                <span>📧</span>
+                <Icon name="mail" size={17} />
                 <span>E-Ticket sent to <strong>{user?.email}</strong></span>
               </div>
             )}
 
-            <div style={{ fontSize: '64px', marginBottom: '12px', animation: 'bounce 0.8s ease' }}>✅</div>
+            <div style={{ marginBottom: '12px', animation: 'bounce 0.8s ease', color: '#22c55e' }}><Icon name="confirmed" size={56} /></div>
             <h3 style={{ fontSize: '20px', fontWeight: '800', margin: '0 0 8px', color: '#0f172a' }}>Booking Confirmed!</h3>
             <p style={{ color: '#64748b', margin: '0 0 20px' }}>Your e-ticket has been saved to the dashboard and sent to your email.</p>
 
@@ -256,29 +265,29 @@ export default function BookingModal({ isOpen, onClose, bookingType, bookingDeta
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Status</span>
-                <span style={{ color: '#22c55e', fontWeight: '800', fontSize: '13px' }}>✓ Confirmed & Paid</span>
+                <span style={{ color: '#22c55e', fontWeight: '800', fontSize: '13px' }}><Icon name="check" size={14} /> Confirmed &amp; Paid</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase', fontWeight: '700' }}>Email</span>
-                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: '600' }}>📧 Sent to {user?.email}</span>
+                <span style={{ fontSize: '13px', color: '#0f172a', fontWeight: '600' }}><Icon name="mail" size={14} /> Sent to {user?.email}</span>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="confirmed-actions" style={{ gap: '12px', flexWrap: 'wrap' }}>
-              <button className="btn btn-secondary" onClick={onClose}>Close</button>
+              <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
               <button
                 className="btn btn-primary"
                 onClick={() => openTicketPrintWindow(booking)}
                 style={{ background: 'linear-gradient(135deg, #c9a84c, #8b6914)', color: '#000', fontWeight: '800' }}
               >
-                📄 Download E-Ticket (PDF)
+                <Icon name="document" size={16} /> Download E-Ticket (PDF)
               </button>
-              <a className="btn btn-primary" href="/dashboard" style={{ textDecoration: 'none' }}>📊 View Dashboard →</a>
+              <a className="btn btn-primary" href="/dashboard" style={{ textDecoration: 'none' }}><Icon name="layoutDashboard" size={16} /> View Dashboard</a>
             </div>
 
             <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '16px', lineHeight: '1.5' }}>
-              🔒 Your data is secure. A copy of this ticket has been saved locally for offline access.
+              <Icon name="lock" size={14} /> Your data is secure. A copy of this ticket has been saved locally for offline access.
             </p>
           </div>
         )}

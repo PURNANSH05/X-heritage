@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Bus, CarFront, Hotel, Map, Plane, Train, Landmark, Search, ScanLine, Heart, LayoutDashboard, Info, ShieldCheck, FileText, Settings, X, ChevronDown, ChevronUp, LogOut } from 'lucide-react';
 import LanguageSelector from './LanguageSelector.jsx';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -19,30 +20,30 @@ export default function NavBar() {
     {
       label: t('nav.explore'),
       items: [
-        { to: '/', label: t('nav.home'), icon: '🏛️', end: true },
-        { to: '/search', label: t('nav.destinations'), icon: '🔍' },
-        { to: '/scanner', label: t('nav.scanner'), icon: '📷' },
-        { to: '/favorites', label: t('nav.favorites'), icon: '❤️' },
+        { to: '/', label: t('nav.home'), icon: Landmark, end: true },
+        { to: '/search', label: t('nav.destinations'), icon: Search },
+        { to: '/scanner', label: t('nav.scanner'), icon: ScanLine },
+        { to: '/favorites', label: t('nav.favorites'), icon: Heart },
       ],
     },
     {
       label: t('nav.bookTravel'),
       items: [
-        { to: '/trip-planner', label: t('nav.tripPlanner'), icon: '🗺️' },
-        { to: '/flights', label: t('nav.flights'), icon: '✈️' },
-        { to: '/trains', label: t('nav.trains'), icon: '🚂' },
-        { to: '/buses', label: t('nav.buses'), icon: '🚌' },
-        { to: '/hotels', label: t('nav.hotels'), icon: '🏨' },
-        { to: '/local-transport', label: t('nav.cabs'), icon: '🚗' },
+        { to: '/trip-planner', label: t('nav.tripPlanner'), icon: Map },
+        { to: '/flights', label: t('nav.flights'), icon: Plane },
+        { to: '/trains', label: t('nav.trains'), icon: Train },
+        { to: '/buses', label: t('nav.buses'), icon: Bus },
+        { to: '/hotels', label: t('nav.hotels'), icon: Hotel },
+        { to: '/local-transport', label: t('nav.cabs'), icon: CarFront },
       ],
     },
     {
       label: t('nav.account'),
       items: [
-        { to: '/dashboard', label: t('nav.dashboard'), icon: '📊' },
-        { to: '/about', label: t('nav.about'), icon: 'ℹ️' },
-        { to: '/security', label: '🛡️ Security & Trust', icon: '🔒' },
-        { to: '/privacy', label: 'Privacy Policy', icon: '📋' },
+        { to: '/dashboard', label: t('nav.dashboard'), icon: LayoutDashboard },
+        { to: '/about', label: t('nav.about'), icon: Info },
+        { to: '/security', label: 'Security & Trust', icon: ShieldCheck },
+        { to: '/privacy', label: 'Privacy Policy', icon: FileText },
       ],
     },
   ];
@@ -131,7 +132,7 @@ export default function NavBar() {
 
           {/* Logo / Brand */}
           <Link to="/" className="brand" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
-            <img src="/logo.svg" alt="HeritageX" className="brand-mark" />
+            <img src="/logo-light.svg" alt="HeritageX" className="brand-mark" />
           </Link>
 
           {/* Spacer */}
@@ -152,7 +153,7 @@ export default function NavBar() {
                 >
                   <span className="nav-avatar-initials">{user.avatar || user.name?.[0] || '?'}</span>
                   <span className="nav-avatar-name">{user.name?.split(' ')[0]}</span>
-                  <span className="nav-avatar-chevron">{dropOpen ? '▲' : '▼'}</span>
+                  <span className="nav-avatar-chevron">{dropOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
                 </button>
 
                 {dropOpen && (
@@ -166,19 +167,19 @@ export default function NavBar() {
                     </div>
                     <div className="nav-dropdown-divider" />
                     <Link to="/dashboard" className="nav-dropdown-item" onClick={() => setDropOpen(false)} role="menuitem">
-                      📊 My Dashboard
+                      <LayoutDashboard size={16} aria-hidden="true" /> My Dashboard
                     </Link>
                     <Link to="/favorites" className="nav-dropdown-item" onClick={() => setDropOpen(false)} role="menuitem">
-                      ❤️ My Favorites
+                      <Heart size={16} aria-hidden="true" /> My Favorites
                     </Link>
                     {isAdmin && (
                       <Link to="/admin" className="nav-dropdown-item" onClick={() => setDropOpen(false)} role="menuitem">
-                        ⚙️ Admin Panel
+                        <Settings size={16} aria-hidden="true" /> Admin Panel
                       </Link>
                     )}
                     <div className="nav-dropdown-divider" />
                     <button type="button" className="nav-dropdown-item nav-dropdown-logout" onClick={handleLogout} role="menuitem">
-                      ⏏ Sign Out
+                      <LogOut size={16} aria-hidden="true" /> Sign Out
                     </button>
                   </div>
                 )}
@@ -223,7 +224,7 @@ export default function NavBar() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-            <img src="/logo.svg" alt="HeritageX" style={{ height: '32px', width: '32px' }} />
+            <img src="/favicon.svg" alt="" aria-hidden="true" style={{ height: '32px', width: '32px' }} />
             <span style={{ fontWeight: '800', fontSize: '18px', color: '#c9a84c', letterSpacing: '0.5px' }}>
               HeritageX
             </span>
@@ -241,7 +242,7 @@ export default function NavBar() {
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
             onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
           >
-            ✕
+            <X size={17} strokeWidth={1.8} />
           </button>
         </div>
 
@@ -315,8 +316,8 @@ export default function NavBar() {
                     }
                   }}
                 >
-                  <span style={{ fontSize: '18px', width: '22px', textAlign: 'center', flexShrink: 0 }}>
-                    {item.icon}
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '22px', flexShrink: 0 }} aria-hidden="true">
+                    <item.icon size={17} strokeWidth={1.8} />
                   </span>
                   {item.label}
                 </NavLink>
@@ -347,7 +348,7 @@ export default function NavBar() {
                   transition: 'all 0.18s ease',
                 })}
               >
-                <span style={{ fontSize: '18px', width: '22px', textAlign: 'center' }}>⚙️</span>
+                <Settings size={17} strokeWidth={1.8} aria-hidden="true" />
                 {t('nav.admin')}
               </NavLink>
             </div>
@@ -368,7 +369,7 @@ export default function NavBar() {
             alignItems: 'center',
             gap: '10px',
           }}>
-            <span style={{ fontSize: '18px' }}>🔒</span>
+            <span><ShieldCheck size={18} strokeWidth={1.8} /></span>
             <div>
               <div style={{ fontSize: '11px', fontWeight: '800', color: '#86efac' }}>SSL Secured</div>
               <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>256-bit TLS 1.3 encryption</div>

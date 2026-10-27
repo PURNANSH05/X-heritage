@@ -1,4 +1,18 @@
 {
+  "golden-temple-43": {
+    "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Majestic_Golden_temple_in_Amritsar_and_it%E2%80%99s_beautiful_surroundings_at_sunset.jpg/1280px-Majestic_Golden_temple_in_Amritsar_and_it%E2%80%99s_beautiful_surroundings_at_sunset.jpg",
+    "photos": [
+      { "title": "Golden Temple framed by the entrance arch", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/A_closer_view_of_the_imposing_entrance_arch_%2827161286589%29.jpg/1280px-A_closer_view_of_the_imposing_entrance_arch_%2827161286589%29.jpg" },
+      { "title": "Golden Temple and surroundings at sunset", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Majestic_Golden_temple_in_Amritsar_and_it%E2%80%99s_beautiful_surroundings_at_sunset.jpg/1280px-Majestic_Golden_temple_in_Amritsar_and_it%E2%80%99s_beautiful_surroundings_at_sunset.jpg" }
+    ]
+  },
+  "hampi-44": {
+    "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Hampi_-_Lotus_Mahal.jpg/1280px-Hampi_-_Lotus_Mahal.jpg",
+    "photos": [
+      { "title": "Lotus Mahal, Hampi", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Hampi_-_Lotus_Mahal.jpg/1280px-Hampi_-_Lotus_Mahal.jpg" },
+      { "title": "Stone Chariot at Vittala Temple, Hampi", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Iconic_Stone_Chariot_%40_Vittala_Temple%2C_Hampi%2C_Karnataka.jpg/1280px-Iconic_Stone_Chariot_%40_Vittala_Temple%2C_Hampi%2C_Karnataka.jpg" }
+    ]
+  },
   "taj-mahal-01": {
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Taj_Mahal_%28Edited%29.jpeg/1280px-Taj_Mahal_%28Edited%29.jpeg",
     "photos": [
@@ -146,20 +160,8 @@
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Jantar_Mantar_at_Jaipur.jpg/1280px-Jantar_Mantar_at_Jaipur.jpg",
     "photos": [
       {
-        "title": "Crab Nebula",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_Nebula.jpg/1280px-Crab_Nebula.jpg"
-      },
-      {
         "title": "Bhairav Temple Jantar Mantar Jaipur",
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bhairav_Temple_Jantar_Mantar_Jaipur.jpg/1280px-Bhairav_Temple_Jantar_Mantar_Jaipur.jpg"
-      },
-      {
-        "title": "Earth-moon",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Earth-moon.jpg/1280px-Earth-moon.jpg"
-      },
-      {
-        "title": "He1523a",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/He1523a.jpg"
       }
     ]
   },
@@ -461,10 +463,6 @@
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Front_Elevation_of_Basilica_of_Bom_Jesus.jpg/1280px-Front_Elevation_of_Basilica_of_Bom_Jesus.jpg",
     "photos": [
       {
-        "title": "046CupolaSPietro",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/046CupolaSPietro.jpg"
-      },
-      {
         "title": "Basilica of Bom Jesus and vehicles parked infront",
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Basilica_of_Bom_Jesus_and_vehicles_parked_infront.jpg/1280px-Basilica_of_Bom_Jesus_and_vehicles_parked_infront.jpg"
       },
@@ -564,24 +562,7 @@
   },
   "bodh-gaya-temple-28": {
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mahabodhitemple.jpg/1280px-Mahabodhitemple.jpg",
-    "photos": [
-      {
-        "title": "011 Pillar, Chariot Scene",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/011_Pillar%2C_Chariot_Scene.jpg/1280px-011_Pillar%2C_Chariot_Scene.jpg"
-      },
-      {
-        "title": "024 Horse Man",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/024_Horse_Man.jpg/1280px-024_Horse_Man.jpg"
-      },
-      {
-        "title": "026 Elephant",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/026_Elephant.jpg/1280px-026_Elephant.jpg"
-      },
-      {
-        "title": "027 Horse",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/027_Horse.jpg/1280px-027_Horse.jpg"
-      }
-    ]
+    "photos": []
   },
   "darjeeling-tea-29": {
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/DarjeelingTrainFruitshop_%282%29.jpg/1280px-DarjeelingTrainFruitshop_%282%29.jpg",
@@ -589,14 +570,6 @@
       {
         "title": "1046 IndiaDarjeeling 19931231 (2)",
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/1046_IndiaDarjeeling_19931231_%282%29.jpg/1280px-1046_IndiaDarjeeling_19931231_%282%29.jpg"
-      },
-      {
-        "title": "Art of W. Taylor in 1854, Himalayan Journals; or, Notes of a Naturalist in Bengal, the Sikkim and Nepal Himalayas, the Khasia Mountains, &c. Volume 1 by J. D. Hooker, Kanchanjunga from Hodgson's bungalow (cropped)",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Art_of_W._Taylor_in_1854%2C_Himalayan_Journals%3B_or%2C_Notes_of_a_Naturalist_in_Bengal%2C_the_Sikkim_and_Nepal_Himalayas%2C_the_Khasia_Mountains%2C_%26c._Volume_1_by_J._D._Hooker%2C_Kanchanjunga_from_Hodgson%27s_bungalow_%28cropped%29.jpg/1280px-thumbnail.jpg"
-      },
-      {
-        "title": "Average annual temperatures Darjeeling 1890 to 2010",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Average_annual_temperatures_Darjeeling_1890_to_2010.jpg/1280px-Average_annual_temperatures_Darjeeling_1890_to_2010.jpg"
       },
       {
         "title": "Buddhist view",
@@ -712,10 +685,6 @@
   "colosseum-35": {
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg",
     "photos": [
-      {
-        "title": "046CupolaSPietro",
-        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/046CupolaSPietro.jpg"
-      },
       {
         "title": "0 Colosseum - Rome 111001 (2)",
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/0_Colosseum_-_Rome_111001_%282%29.JPG/1280px-0_Colosseum_-_Rome_111001_%282%29.JPG"

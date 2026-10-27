@@ -18,9 +18,12 @@ GET /api/health
 {
   "ok": true,
   "service": "heritagex-backend",
+  "database": "connected",
   "timestamp": "2026-06-22T10:30:00Z"
 }
 ```
+
+The health endpoint returns HTTP `503` with `ok: false` and `database: "disconnected"` when MongoDB is unavailable.
 
 ---
 

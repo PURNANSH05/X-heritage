@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AIRPORTS, generateFlights, POPULAR_ROUTES } from '../data/flightData.js';
 import FlightCard from '../components/FlightCard.jsx';
 import BookingModal from '../components/BookingModal.jsx';
+import Icon from '../components/Icon.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const CLASSES = ['Economy', 'Premium Economy', 'Business', 'First Class'];
@@ -59,7 +60,7 @@ export default function FlightSearch() {
       <div className="container">
         {/* Header */}
         <div className="flights-hero">
-          <h1>✈️ Book Flights</h1>
+          <h1><Icon name="plane" size={24} /> Book Flights</h1>
           <p>Compare and book flights across all major Indian airlines</p>
         </div>
 
@@ -133,7 +134,7 @@ export default function FlightSearch() {
               onClick={handleSearch}
               disabled={searching || form.from === form.to}
             >
-              {searching ? <><span className="login-spinner" /> Searching…</> : '🔍 Search Flights'}
+              {searching ? <><span className="login-spinner" /> Searching…</> : <><Icon name="search" size={16} /> Search Flights</>}
             </button>
           </div>
         </div>
@@ -151,7 +152,7 @@ export default function FlightSearch() {
                     setForm(f => ({ ...f, from: r.from, to: r.to }));
                   }}
                 >
-                  ✈️ {r.label}
+                  <><Icon name="plane" size={15} /> {r.label}</>
                 </button>
               ))}
             </div>

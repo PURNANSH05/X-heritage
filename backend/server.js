@@ -1,7 +1,12 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import { sites } from './data/sites.js';
 import { makePoster } from '../frontend/src/utils/art.js';
+import { connectDatabase } from './db.js';
+import Site from './models/Site.js';
+import Booking from './models/Booking.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -157,11 +162,22 @@ async function fetchWikiPlaces(query, limit = 8) {
 }
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, service: 'heritagex-backend', timestamp: new Date().toISOString() });
+  const databaseConnected = mongoose.connection.readyState === 1;
+  res.status(databaseConnected ? 200 : 503).json({
+    ok: databaseConnected,
+    service: 'heritagex-backend',
+    database: databaseConnected ? 'connected' : 'disconnected',
+    timestamp: new Date().toISOString()
+  });
 });
 
-app.get('/api/sites', (_req, res) => {
-  res.json(sites);
+app.get('/api/sites', async (_req, res) => {
+  try {
+    res.json(await Site.find({}, { _id: 0 }).lean());
+  } catch (error) {
+    console.error('Could not load sites from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load heritage sites.' });
+  }
 });
 
 function cleanPhotoList(images, mainTitle) {
@@ -320,66 +336,86 @@ app.get('/api/sites/:id', async (req, res) => {
     }
   }
 
-  const site = sites.find((item) => item.id === id);
-  if (!site) return res.status(404).json({ message: 'Site not found' });
-  res.json(site);
+  try {
+    const site = await Site.findOne({ id }, { _id: 0 }).lean();
+    if (!site) return res.status(404).json({ message: 'Site not found' });
+    res.json(site);
+  } catch (error) {
+    console.error('Could not load site from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load heritage site.' });
+  }
 });
 
 // Advanced search with filters
-app.get('/api/search', (req, res) => {
+app.get('/api/search', async (req, res) => {
   const query = normalizeText(req.query.q || '');
   const category = String(req.query.category || 'All');
   const country = String(req.query.country || 'All');
   const city = String(req.query.city || 'All');
   
-  const results = sites.filter((site) => {
-    // Text search across all relevant fields
-    const searchText = siteSearchHaystack(site);
-    const matchesQuery = !query || searchText.includes(query);
-    
-    // Category filter
-    const matchesCategory = category === 'All' || site.category === category;
-    
-    // Country filter
-    const matchesCountry = country === 'All' || site.country === country;
-    
-    // City filter
-    const matchesCity = city === 'All' || site.city === city;
-    
-    return matchesQuery && matchesCategory && matchesCountry && matchesCity;
-  }).sort((a, b) => {
-    const scoreA = scoreSite(a, query);
-    const scoreB = scoreSite(b, query);
-    if (scoreA !== scoreB) return scoreB - scoreA;
-    return (b.rating || 0) - (a.rating || 0);
-  });
-  
-  res.json(results);
+  try {
+    const catalog = await Site.find({}, { _id: 0 }).lean();
+    const results = catalog.filter((site) => {
+      // Text search across all relevant fields
+      const searchText = siteSearchHaystack(site);
+      const matchesQuery = !query || searchText.includes(query);
+
+      // Category, country, and city filters
+      const matchesCategory = category === 'All' || site.category === category;
+      const matchesCountry = country === 'All' || site.country === country;
+      const matchesCity = city === 'All' || site.city === city;
+
+      return matchesQuery && matchesCategory && matchesCountry && matchesCity;
+    }).sort((a, b) => {
+      const scoreA = scoreSite(a, query);
+      const scoreB = scoreSite(b, query);
+      if (scoreA !== scoreB) return scoreB - scoreA;
+      return (b.rating || 0) - (a.rating || 0);
+    });
+    res.json(results);
+  } catch (error) {
+    console.error('Could not search MongoDB sites:', error);
+    res.status(500).json({ error: 'Could not search heritage sites.' });
+  }
 });
 
 // Get all countries
-app.get('/api/countries', (_req, res) => {
-  const countries = Array.from(new Set(sites.map(s => s.country))).sort();
-  res.json(countries);
+app.get('/api/countries', async (_req, res) => {
+  try {
+    const catalog = await Site.find({}, { country: 1, _id: 0 }).lean();
+    res.json(Array.from(new Set(catalog.map((site) => site.country).filter(Boolean))).sort());
+  } catch (error) {
+    console.error('Could not load countries from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load countries.' });
+  }
 });
 
 // Get cities by country
-app.get('/api/cities', (req, res) => {
+app.get('/api/cities', async (req, res) => {
   const country = String(req.query.country || 'All');
-  const cities = Array.from(new Set(
-    sites.filter(s => country === 'All' || s.country === country).map(s => s.city)
-  )).sort();
-  res.json(cities);
+  try {
+    const filter = country === 'All' ? {} : { country };
+    const catalog = await Site.find(filter, { city: 1, _id: 0 }).lean();
+    res.json(Array.from(new Set(catalog.map((site) => site.city).filter(Boolean))).sort());
+  } catch (error) {
+    console.error('Could not load cities from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load cities.' });
+  }
 });
 
 // Get categories
-app.get('/api/categories', (_req, res) => {
-  const categories = ['All', ...Array.from(new Set(sites.map(s => s.category))).sort()];
-  res.json(categories);
+app.get('/api/categories', async (_req, res) => {
+  try {
+    const catalog = await Site.find({}, { category: 1, _id: 0 }).lean();
+    res.json(['All', ...Array.from(new Set(catalog.map((site) => site.category).filter(Boolean))).sort()]);
+  } catch (error) {
+    console.error('Could not load categories from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load categories.' });
+  }
 });
 
 // Nearby sites based on coordinates
-app.get('/api/nearby', (req, res) => {
+app.get('/api/nearby', async (req, res) => {
   const { latitude, longitude, radius = 500 } = req.query;
   
   if (!latitude || !longitude) {
@@ -389,15 +425,20 @@ app.get('/api/nearby', (req, res) => {
   const lat = parseFloat(latitude);
   const lng = parseFloat(longitude);
   
-  const nearby = sites
-    .map(site => ({
-      ...site,
-      distance: calculateDistance(lat, lng, site.latitude, site.longitude)
-    }))
-    .filter(site => site.distance <= radius)
-    .sort((a, b) => a.distance - b.distance);
-  
-  res.json(nearby);
+  try {
+    const catalog = await Site.find({}, { _id: 0 }).lean();
+    const nearby = catalog
+      .map(site => ({
+        ...site,
+        distance: calculateDistance(lat, lng, site.latitude, site.longitude)
+      }))
+      .filter(site => site.distance <= Number(radius))
+      .sort((a, b) => a.distance - b.distance);
+    res.json(nearby);
+  } catch (error) {
+    console.error('Could not load nearby sites from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load nearby sites.' });
+  }
 });
 
 // Function to calculate distance between two coordinates (Haversine formula)
@@ -414,7 +455,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 // Improved scanner with better matching
-app.post('/api/scan', (req, res) => {
+app.post('/api/scan', async (req, res) => {
   const inputVal = req.body?.input || '';
   const raw = String(inputVal)
     .toLowerCase()
@@ -423,50 +464,45 @@ app.post('/api/scan', (req, res) => {
     .replace(/\s+/g, ' ')
     .trim();
   
-  if (!raw) {
-    return res.status(400).json({
-      message: 'Please provide scan input',
-      suggestions: sites.slice(0, 8)
+  try {
+    const catalog = await Site.find({}, { _id: 0 }).lean();
+    if (!raw) {
+      return res.status(400).json({
+        message: 'Please provide scan input',
+        suggestions: catalog.slice(0, 8)
+      });
+    }
+
+    const exactMatch = catalog.find((site) =>
+      (site.scannerKeywords || []).some((keyword) => normalizeText(keyword) === raw)
+    );
+    if (exactMatch) return res.json({ matched: true, confidence: 'high', site: exactMatch });
+
+    const partialMatch = catalog.find((site) =>
+      (site.scannerKeywords || []).some((keyword) => {
+        const normalizedKeyword = normalizeText(keyword);
+        return raw.includes(normalizedKeyword) || normalizedKeyword.includes(raw);
+      })
+    );
+    if (partialMatch) return res.json({ matched: true, confidence: 'medium', site: partialMatch });
+
+    const textMatch = catalog.find((site) =>
+      `${site.name?.en || ''} ${site.city || ''} ${site.country || ''}`.toLowerCase().includes(raw)
+    );
+    if (textMatch) return res.json({ matched: true, confidence: 'low', site: textMatch });
+
+    res.status(404).json({
+      message: 'No exact match found. Try these heritage sites:',
+      suggestions: catalog.slice(0, 8)
     });
+  } catch (error) {
+    console.error('Could not scan MongoDB sites:', error);
+    res.status(500).json({ error: 'Could not scan heritage sites.' });
   }
-  
-  // Direct keyword match (highest priority)
-  const exactMatch = sites.find((site) => 
-    site.scannerKeywords.some((keyword) => raw === keyword)
-  );
-  
-  if (exactMatch) {
-    return res.json({ matched: true, confidence: 'high', site: exactMatch });
-  }
-  
-  // Partial keyword match
-  const partialMatch = sites.find((site) => 
-    site.scannerKeywords.some((keyword) => raw.includes(keyword) || keyword.includes(raw))
-  );
-  
-  if (partialMatch) {
-    return res.json({ matched: true, confidence: 'medium', site: partialMatch });
-  }
-  
-  // Search in name and description
-  const textMatch = sites.find((site) => {
-    const searchText = `${site.name.en} ${site.city} ${site.country}`.toLowerCase();
-    return searchText.includes(raw);
-  });
-  
-  if (textMatch) {
-    return res.json({ matched: true, confidence: 'low', site: textMatch });
-  }
-  
-  // No match - return suggestions
-  res.status(404).json({
-    message: 'No exact match found. Try these heritage sites:',
-    suggestions: sites.slice(0, 8)
-  });
 });
 
 // Get suggestions based on partial input
-app.get('/api/suggestions', (req, res) => {
+app.get('/api/suggestions', async (req, res) => {
   const query = normalizeText(req.query.q || '');
   
   if (!query || query.length < 2) {
@@ -474,18 +510,23 @@ app.get('/api/suggestions', (req, res) => {
     return;
   }
   
-  const suggestions = sites
-    .filter(site => siteSearchHaystack(site).includes(query))
-    .sort((a, b) => scoreSite(b, query) - scoreSite(a, query))
-    .slice(0, 10)
-    .map(site => ({
-      name: site.name.en,
-      city: site.city,
-      country: site.country,
-      id: site.id
-    }));
-  
-  res.json(suggestions);
+  try {
+    const catalog = await Site.find({}, { _id: 0 }).lean();
+    const suggestions = catalog
+      .filter(site => siteSearchHaystack(site).includes(query))
+      .sort((a, b) => scoreSite(b, query) - scoreSite(a, query))
+      .slice(0, 10)
+      .map(site => ({
+        name: site.name?.en || 'Untitled place',
+        city: site.city,
+        country: site.country,
+        id: site.id
+      }));
+    res.json(suggestions);
+  } catch (error) {
+    console.error('Could not load suggestions from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load suggestions.' });
+  }
 });
 
 app.get('/api/world-search', async (req, res) => {
@@ -803,9 +844,6 @@ function generateItinerary(destination, days, budget) {
   return itinerary;
 }
 
-// In-memory bookings store
-const bookingsDB = [];
-
 function generateAIResponse(msg) {
   const m = (msg || '').toLowerCase();
   if (m.includes('hello') || m.includes('hi ') || m.match(/^hi$/))
@@ -886,8 +924,10 @@ app.get('/api/weather', (req, res) => {
   });
 });
 
-app.post('/api/bookings', (req, res) => {
+app.post('/api/bookings', async (req, res) => {
   const { type, userId, details, passengerDetails, paymentMethod } = req.body;
+  if (!type) return res.status(400).json({ error: 'Booking type is required.' });
+
   const booking = {
     id: `BK${Date.now().toString(36).toUpperCase()}`,
     type, userId, details, passengerDetails, paymentMethod,
@@ -896,20 +936,36 @@ app.post('/api/bookings', (req, res) => {
     bookedAt: new Date().toISOString(),
     totalAmount: details?.totalPrice || details?.price || details?.estimatedFare || 0,
   };
-  bookingsDB.push(booking);
-  res.json({ success: true, booking });
+
+  try {
+    await Booking.create(booking);
+    res.status(201).json({ success: true, booking });
+  } catch (error) {
+    console.error('Could not save booking to MongoDB:', error);
+    res.status(500).json({ error: 'Could not save booking.' });
+  }
 });
 
-app.get('/api/bookings', (req, res) => {
+app.get('/api/bookings', async (req, res) => {
   const { userId } = req.query;
-  const result = userId ? bookingsDB.filter(b => b.userId === userId) : bookingsDB;
-  res.json(result);
+  try {
+    const filter = userId ? { userId: String(userId) } : {};
+    res.json(await Booking.find(filter, { _id: 0 }).sort({ bookedAt: -1 }).lean());
+  } catch (error) {
+    console.error('Could not load bookings from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load bookings.' });
+  }
 });
 
-app.get('/api/bookings/:id', (req, res) => {
-  const b = bookingsDB.find(b => b.id === req.params.id);
-  if (!b) return res.status(404).json({ error: 'Booking not found' });
-  res.json(b);
+app.get('/api/bookings/:id', async (req, res) => {
+  try {
+    const booking = await Booking.findOne({ id: req.params.id }, { _id: 0 }).lean();
+    if (!booking) return res.status(404).json({ error: 'Booking not found' });
+    res.json(booking);
+  } catch (error) {
+    console.error('Could not load booking from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load booking.' });
+  }
 });
 
 app.post('/api/payment', (req, res) => {
@@ -937,22 +993,58 @@ app.post('/api/ai-chat', (req, res) => {
 });
 
 // Admin: list all bookings (simple auth check)
-app.get('/api/admin/bookings', (req, res) => {
-  res.json(bookingsDB);
+app.get('/api/admin/bookings', async (_req, res) => {
+  try {
+    res.json(await Booking.find({}, { _id: 0 }).sort({ bookedAt: -1 }).lean());
+  } catch (error) {
+    console.error('Could not load admin bookings from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load bookings.' });
+  }
 });
 
-app.get('/api/admin/stats', (_req, res) => {
-  res.json({
-    totalBookings: bookingsDB.length,
-    totalRevenue: bookingsDB.reduce((sum, b) => sum + (b.totalAmount || 0), 0),
-    flightBookings: bookingsDB.filter(b => b.type === 'flight').length,
-    hotelBookings: bookingsDB.filter(b => b.type === 'hotel').length,
-    trainBookings: bookingsDB.filter(b => b.type === 'train').length,
-    busBookings: bookingsDB.filter(b => b.type === 'bus').length,
-    cabBookings: bookingsDB.filter(b => b.type === 'cab').length,
-  });
+app.get('/api/admin/stats', async (_req, res) => {
+  try {
+    const [stats = {}] = await Booking.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalBookings: { $sum: 1 },
+          totalRevenue: { $sum: '$totalAmount' },
+          flightBookings: { $sum: { $cond: [{ $eq: ['$type', 'flight'] }, 1, 0] } },
+          hotelBookings: { $sum: { $cond: [{ $eq: ['$type', 'hotel'] }, 1, 0] } },
+          trainBookings: { $sum: { $cond: [{ $eq: ['$type', 'train'] }, 1, 0] } },
+          busBookings: { $sum: { $cond: [{ $eq: ['$type', 'bus'] }, 1, 0] } },
+          cabBookings: { $sum: { $cond: [{ $eq: ['$type', 'cab'] }, 1, 0] } }
+        }
+      },
+      { $project: { _id: 0 } }
+    ]);
+    res.json({
+      totalBookings: 0,
+      totalRevenue: 0,
+      flightBookings: 0,
+      hotelBookings: 0,
+      trainBookings: 0,
+      busBookings: 0,
+      cabBookings: 0,
+      ...stats
+    });
+  } catch (error) {
+    console.error('Could not calculate booking stats from MongoDB:', error);
+    res.status(500).json({ error: 'Could not load booking statistics.' });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`HeritageX backend listening on http://localhost:${port}`);
-});
+async function startServer() {
+  try {
+    await connectDatabase();
+    app.listen(port, () => {
+      console.log(`HeritageX backend listening on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error(`Backend startup failed: ${error.message}`);
+    process.exitCode = 1;
+  }
+}
+
+startServer();

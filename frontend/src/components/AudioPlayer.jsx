@@ -1,23 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Icon from './Icon.jsx';
 
-/* ── Language → BCP-47 locale + display name ── */
+/* ── Language to BCP-47 locale and display name ── */
 const LANG_MAP = [
-  { label: 'English',            code: 'en-US', flag: '🇺🇸' },
-  { label: 'Hindi',              code: 'hi-IN', flag: '🇮🇳' },
-  { label: 'Arabic',             code: 'ar-SA', flag: '🇸🇦' },
-  { label: 'French',             code: 'fr-FR', flag: '🇫🇷' },
-  { label: 'Spanish',            code: 'es-ES', flag: '🇪🇸' },
-  { label: 'German',             code: 'de-DE', flag: '🇩🇪' },
-  { label: 'Italian',            code: 'it-IT', flag: '🇮🇹' },
-  { label: 'Portuguese',         code: 'pt-BR', flag: '🇧🇷' },
-  { label: 'Japanese',           code: 'ja-JP', flag: '🇯🇵' },
-  { label: 'Chinese (Mandarin)', code: 'zh-CN', flag: '🇨🇳' },
-  { label: 'Korean',             code: 'ko-KR', flag: '🇰🇷' },
-  { label: 'Russian',            code: 'ru-RU', flag: '🇷🇺' },
-  { label: 'Turkish',            code: 'tr-TR', flag: '🇹🇷' },
-  { label: 'Dutch',              code: 'nl-NL', flag: '🇳🇱' },
-  { label: 'Polish',             code: 'pl-PL', flag: '🇵🇱' },
-  { label: 'Gujarati',           code: 'gu-IN', flag: '🇮🇳' },
+  { label: 'English',            code: 'en-US' },
+  { label: 'Hindi',              code: 'hi-IN' },
+  { label: 'Arabic',             code: 'ar-SA' },
+  { label: 'French',             code: 'fr-FR' },
+  { label: 'Spanish',            code: 'es-ES' },
+  { label: 'German',             code: 'de-DE' },
+  { label: 'Italian',            code: 'it-IT' },
+  { label: 'Portuguese',         code: 'pt-BR' },
+  { label: 'Japanese',           code: 'ja-JP' },
+  { label: 'Chinese (Mandarin)', code: 'zh-CN' },
+  { label: 'Korean',             code: 'ko-KR' },
+  { label: 'Russian',            code: 'ru-RU' },
+  { label: 'Turkish',            code: 'tr-TR' },
+  { label: 'Dutch',              code: 'nl-NL' },
+  { label: 'Polish',             code: 'pl-PL' },
+  { label: 'Gujarati',           code: 'gu-IN' },
 ];
 
 /* ── Build the full narration script from site data ── */
@@ -228,7 +229,7 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
   if (!supported) {
     return (
       <div className="ag-shell ag-unsupported">
-        <div className="ag-unsupported-icon">🔇</div>
+        <div className="ag-unsupported-icon"><Icon name="volumeOff" size={24} /></div>
         <p>Audio guide not supported in this browser. Please use Chrome, Edge, or Safari.</p>
       </div>
     );
@@ -239,7 +240,7 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
       {/* Header */}
       <div className="ag-header">
         <div className="ag-title-row">
-          <span className="ag-icon">🎧</span>
+          <span className="ag-icon"><Icon name="headphones" size={20} /></span>
           <div>
             <strong className="ag-title">Audio Guide</strong>
             <span className="ag-subtitle">
@@ -280,18 +281,19 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
           onClick={stop}
           disabled={!playing && !paused}
           title="Stop"
+          aria-label="Stop audio guide"
         >
-          ⏹
+          <Icon name="stop" size={17} />
         </button>
-
         {!playing ? (
           <button
             type="button"
             className="ag-btn ag-btn-primary ag-btn-play"
             onClick={play}
             title="Play audio guide"
+            aria-label="Play audio guide"
           >
-            ▶ Play
+            <Icon name="play" size={16} /> Play
           </button>
         ) : paused ? (
           <button
@@ -299,8 +301,9 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
             className="ag-btn ag-btn-primary ag-btn-play"
             onClick={resume}
             title="Resume"
+            aria-label="Resume audio guide"
           >
-            ▶ Resume
+            <Icon name="play" size={16} /> Resume
           </button>
         ) : (
           <button
@@ -308,8 +311,9 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
             className="ag-btn ag-btn-primary ag-btn-play"
             onClick={pause}
             title="Pause"
+            aria-label="Pause audio guide"
           >
-            ⏸ Pause
+            <Icon name="pause" size={16} /> Pause
           </button>
         )}
 
@@ -322,6 +326,7 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
                 key={s}
                 type="button"
                 className={`ag-speed-btn ${speed === s ? 'active' : ''}`}
+                aria-pressed={speed === s}
                 onClick={() => {
                   setSpeed(s);
                   if (playing && !paused) { stop(); setTimeout(() => play(), 80); }
@@ -337,7 +342,7 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
       {/* Language selector */}
       <div className="ag-lang-wrap">
         <label className="ag-lang-label" htmlFor="ag-lang-select">
-          🌍 Language
+          <Icon name="globe" size={15} /> Language
         </label>
         <select
           id="ag-lang-select"
@@ -350,7 +355,7 @@ export default function AudioPlayer({ site, availableLanguages = [] }) {
         >
           {displayLangs.map(l => (
             <option key={l.code} value={l.code}>
-              {l.flag} {l.label}
+              {l.label}
             </option>
           ))}
         </select>

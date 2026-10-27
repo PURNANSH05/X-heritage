@@ -56,32 +56,24 @@ A comprehensive, multilingual web application for discovering, scanning, and exp
    cd ..
    ```
 
+4. **Configure MongoDB for the backend:**
+  - Create a free MongoDB Atlas cluster (or use a local MongoDB server).
+  - Copy `backend/.env.example` to `backend/.env` and replace `MONGODB_URI` with your connection string.
+  - For local MongoDB, use `mongodb://127.0.0.1:27017/heritagex`.
+  - For Atlas, create a database user and allow your IP address in Network Access. Keep the password in `.env`; never commit it.
+
+  The backend will connect before listening, seed the bundled heritage catalog into the `sites` collection if records are missing, and save bookings in the `bookings` collection. Restarting the server will not erase bookings.
+
 ### Running the Application
 
-#### Terminal 1 - Start Backend Server
-```bash
-cd backend
-npm start
-# Server will run on http://localhost:4000
-```
+On Windows, double-click `start-site.cmd` in the project root. It checks Node.js and the MongoDB environment file, installs dependencies if missing, builds the frontend, starts both servers, and opens the site.
 
-#### Terminal 2 - Start Frontend Server
-```bash
-cd frontend
-npm start
-# Frontend will run on http://localhost:4173
-```
+For manual startup, open two terminals:
 
-**Or use the pre-configured serve scripts:**
-```bash
-# Terminal 1
-cd backend
-node server.js
+1. Backend: run `npm start` from the `backend` folder.
+2. Frontend: run `npm run build`, then `node serve.js` from the `frontend` folder.
 
-# Terminal 2
-cd frontend
-node serve.js
-```
+The backend requires a valid `MONGODB_URI` in `backend/.env`; check `http://localhost:4000/api/health` if API-backed features do not load.
 
 ### Access the Application
 Open your browser and navigate to: `http://localhost:4173`
@@ -149,8 +141,7 @@ HeritageX/
 │       ├── data/              # Local site data
 │       └── styles.css
 ├── API_DOCUMENTATION.md       # Complete API reference
-├── ENHANCEMENTS_SUMMARY.md    # Detailed enhancement info
-└── README.md                  # This file
+└── README_COMPLETE.md         # Setup and project guide
 ```
 
 ---
@@ -394,7 +385,6 @@ This project is for educational and non-commercial use.
 ## 📞 Support & Documentation
 
 - **API Documentation:** See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
-- **Enhancements Info:** See [ENHANCEMENTS_SUMMARY.md](./ENHANCEMENTS_SUMMARY.md)
 - **Component Details:** See JSDoc comments in component files
 - **Data Structure:** See comments in `backend/data/sites.js`
 

@@ -1,5 +1,6 @@
 /* Terms.jsx — HeritageX Terms of Service */
 import { Link } from 'react-router-dom';
+import Icon from '../components/Icon.jsx';
 
 export default function Terms() {
   return (
@@ -11,7 +12,7 @@ export default function Terms() {
 
         <div style={{ background: '#fff', borderRadius: 20, padding: '40px 48px', boxShadow: '0 2px 20px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8 }}>
-            <span style={{ fontSize: 36 }}>📋</span>
+            <Icon name="clipboard" size={34} />
             <div>
               <h1 style={{ margin: 0, fontSize: 26, fontWeight: 900 }}>Terms of Service</h1>
               <p style={{ margin: 0, color: '#64748b', fontSize: 13 }}>Last updated: June 28, 2026 · Effective immediately</p>
@@ -111,9 +112,9 @@ Our maximum liability for any booking is limited to the amount paid for that spe
           ))}
 
           <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: 24, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <Link to="/security" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13 }}>🛡️ Security Center</Link>
-            <Link to="/privacy" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}>🔒 Privacy Policy</Link>
-            <a href="mailto:legal@heritagex.com" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}>📧 Legal Contact</a>
+            <Link to="/security" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13 }}><Icon name="shield" size={15} /> Security Center</Link>
+            <Link to="/privacy" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}><Icon name="lock" size={15} /> Privacy Policy</Link>
+            <a href="mailto:legal@heritagex.com" className="btn btn-secondary" style={{ textDecoration: 'none', fontSize: 13 }}><Icon name="mail" size={15} /> Legal Contact</a>
           </div>
         </div>
       </div>

@@ -41,7 +41,7 @@ export default function SearchResultCard({ site, featured = false }) {
   return (
     <article className={`search-result-card ${featured ? 'search-result-card-featured' : ''}`}>
       <div className="search-result-media">
-        <SmartImage src={heroImage} fallback={heroFallback} alt={site.name?.en || 'Destination'} className="search-result-media-image" />
+        <SmartImage src={heroImage} fallback={heroFallback} alt={site.name?.en || 'Destination'} className="search-result-media-image" site={site} />
         <div className="search-result-media-overlay" />
         <div className="search-result-badges">
           <Badge tone="gold">{site.category}</Badge>

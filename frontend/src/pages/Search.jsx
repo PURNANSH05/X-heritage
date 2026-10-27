@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar.jsx';
 import SearchResultCard from '../components/SearchResultCard.jsx';
 import { categories } from '../data/sites.js';
+import { fetchPlaceThumbnails } from '../services/placeImageService.js';
 import { fetchCities, fetchCountries, searchSites, searchWorldPlaces } from '../services/siteService.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 
@@ -15,10 +16,22 @@ export default function Search() {
   const [countries, setCountries] = useState(['All']);
   const [cities, setCities] = useState(['All']);
   const [results, setResults] = useState([]);
+  const [placeThumbnails, setPlaceThumbnails] = useState(() => new Map());
   const [worldResults, setWorldResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [worldLoading, setWorldLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    fetchPlaceThumbnails().then((thumbnails) => {
+      if (active) setPlaceThumbnails(thumbnails);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -119,8 +132,17 @@ export default function Search() {
     };
   }, [query]);
 
-  const featuredResult = results[0] || null;
-  const secondaryResults = useMemo(() => results.slice(1), [results]);
+  const resultsWithPhotos = useMemo(() => results.map((site) => {
+    const thumbnail = placeThumbnails.get(site.id);
+    if (!thumbnail) return site;
+    return {
+      ...site,
+      heroImage: thumbnail,
+      photos: [{ title: `${site.name?.en || 'Destination'} photo`, url: thumbnail }, ...(site.photos || [])]
+    };
+  }), [results, placeThumbnails]);
+  const featuredResult = resultsWithPhotos[0] || null;
+  const secondaryResults = useMemo(() => resultsWithPhotos.slice(1), [resultsWithPhotos]);
 
   return (
     <section className="section">
@@ -129,8 +151,9 @@ export default function Search() {
           <div>
             <h1>{t('search')} any city, place, or country</h1>
             <p>
-              Search by destination name, city, country, or landmark and get the strongest match with photos,
-              timings, entry info, and travel details.
+              Browse our curated heritage catalog or look up additional places worldwide. Curated entries
+              include practical visitor details; live reference results can be incomplete, so confirm
+              opening times, access, and fees with official local sources before you travel.
             </p>
           </div>
           <Link to="/scanner" className="btn btn-secondary">

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { VEHICLE_TYPES, POPULAR_ROUTES, generateTransportOptions, calculateFare } from '../data/transportData.js';
 import BookingModal from '../components/BookingModal.jsx';
+import Icon from '../components/Icon.jsx';
 
 const BOOKING_TYPES = ['Now', 'Schedule for Later'];
 
@@ -34,7 +35,7 @@ export default function LocalTransport() {
       id: 'custom',
       from: customFrom,
       to: customTo,
-      icon: '🚗',
+      icon: 'car',
       description: `${customFrom} to ${customTo}`,
       distanceKm: 8,
     };
@@ -47,7 +48,7 @@ export default function LocalTransport() {
     <section className="section flight-page">
       <div className="container">
         <div className="flights-hero">
-          <h1>🚗 Local Transport</h1>
+          <h1><Icon name="car" size={24} /> Local Transport</h1>
           <p>Book cabs, autos, and rentals for your local sightseeing needs</p>
         </div>
 
@@ -60,14 +61,14 @@ export default function LocalTransport() {
               <div className="transport-route-inputs">
                 <input
                   type="text"
-                  placeholder="📍 Pickup location"
+                  placeholder="Pickup location"
                   value={customFrom}
                   onChange={e => setCustomFrom(e.target.value)}
                 />
                 <div className="transport-route-arrow">↓</div>
                 <input
                   type="text"
-                  placeholder="📍 Drop location"
+                  placeholder="Drop location"
                   value={customTo}
                   onChange={e => setCustomTo(e.target.value)}
                 />
@@ -86,7 +87,7 @@ export default function LocalTransport() {
                   className={`transport-route-btn ${activeRoute?.id === route.id ? 'active' : ''}`}
                   onClick={() => handleRouteSelect(route)}
                 >
-                  <span className="transport-route-icon">{route.icon}</span>
+                  <span className="transport-route-icon"><Icon name={route.icon} size={19} /></span>
                   <div className="transport-route-info">
                     <strong>{route.from} → {route.to}</strong>
                     <span>{route.description}</span>
@@ -106,7 +107,7 @@ export default function LocalTransport() {
                     className={`transport-schedule-tab ${bookingSchedule === type ? 'active' : ''}`}
                     onClick={() => setBookingSchedule(type)}
                   >
-                    {type === 'Now' ? '⚡ Now' : '📅 Schedule'}
+                    {type === 'Now' ? <><Icon name="sparkles" size={15} /> Now</> : <><Icon name="calendar" size={15} /> Schedule</>}
                   </button>
                 ))}
               </div>
@@ -126,7 +127,7 @@ export default function LocalTransport() {
           <div className="transport-right">
             {!activeRoute ? (
               <div className="transport-empty">
-                <div style={{ fontSize: 60 }}>🗺️</div>
+                <div><Icon name="map" size={48} /></div>
                 <h3>Select a route to see transport options</h3>
                 <p>Choose from popular routes or enter a custom pickup and drop location</p>
               </div>
@@ -144,13 +145,13 @@ export default function LocalTransport() {
                       className={`transport-option-card ${activeVehicle?.id === vehicle.id ? 'selected' : ''}`}
                       onClick={() => setActiveVehicle(vehicle)}
                     >
-                      <div className="transport-option-icon">{vehicle.icon}</div>
+                      <div className="transport-option-icon"><Icon name={vehicle.icon} size={24} /></div>
                       <div className="transport-option-info">
                         <strong>{vehicle.name}</strong>
                         <span>Up to {vehicle.capacity} {vehicle.capacity === 1 ? 'person' : 'people'} · {vehicle.ac ? 'AC' : 'Non-AC'}</span>
                         <div className="transport-providers">
                           {vehicle.providers?.map(p => (
-                            <span key={p.id} className="transport-provider-tag">{p.logo} {p.name}</span>
+                            <span key={p.id} className="transport-provider-tag"><Icon name={p.logo} size={14} /> {p.name}</span>
                           ))}
                         </div>
                       </div>
@@ -184,13 +185,13 @@ export default function LocalTransport() {
                             eta: p.fare?.eta,
                           })}
                         >
-                          <span style={{ fontSize: 24 }}>{p.logo}</span>
+                          <span style={{ fontSize: 24 }}><Icon name={p.logo} size={22} /></span>
                           <div>
                             <strong>{p.name}</strong>
                             <div style={{ fontSize: 13, color: '#666' }}>
                               ₹{p.fare?.minFare}–{p.fare?.maxFare} · {p.fare?.eta}
                             </div>
-                            {p.promoAvailable && <span className="promo-tag">🎉 Promo available</span>}
+                            {p.promoAvailable && <span className="promo-tag"><Icon name="gift" size={14} /> Promo available</span>}
                           </div>
                           <div style={{ marginLeft: 'auto', fontWeight: 700, color: 'var(--teal)', fontSize: 16 }}>
                             ₹{p.fare?.estimatedFare}
@@ -207,12 +208,12 @@ export default function LocalTransport() {
 
         {/* Rentals Section */}
         <div className="rental-section">
-          <h2>🔑 Self-Drive Rentals</h2>
+          <h2><Icon name="key" size={21} /> Self-Drive Rentals</h2>
           <p>Explore at your own pace with bike, scooter, cycle or car rentals</p>
           <div className="rental-grid">
             {rentals.map(v => (
               <div key={v.id} className="rental-card">
-                <div className="rental-icon">{v.icon}</div>
+                <div className="rental-icon"><Icon name={v.icon} size={28} /></div>
                 <h4>{v.name}</h4>
                 <div className="rental-price">₹{v.perDay}<span>/day</span></div>
                 <div className="rental-deposit">Deposit: ₹{v.deposit}</div>

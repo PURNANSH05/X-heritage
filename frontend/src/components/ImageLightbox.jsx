@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import SmartImage from './SmartImage.jsx';
 
-export default function ImageLightbox({ isOpen, onClose, photos = [], currentIndex, onChangeIndex }) {
+export default function ImageLightbox({ isOpen, onClose, photos = [], currentIndex, onChangeIndex, site }) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -54,6 +54,7 @@ export default function ImageLightbox({ isOpen, onClose, photos = [], currentInd
           fallback={fallback}
           alt={alt}
           className="image-lightbox-img"
+          site={site}
         />
         {title && <div className="image-lightbox-caption">{title}</div>}
       </div>

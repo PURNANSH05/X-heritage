@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Icon from './Icon.jsx';
 
 export default function Footer() {
   return (
@@ -8,35 +9,35 @@ export default function Footer() {
         <div className="container">
           <div className="footer-trust-badges">
             <div className="footer-trust-badge">
-              <span>🔒</span>
+              <span><Icon name="lock" /></span>
               <div>
                 <strong>SSL Secured</strong>
                 <span>256-bit TLS 1.3</span>
               </div>
             </div>
             <div className="footer-trust-badge">
-              <span>💳</span>
+              <span><Icon name="card" /></span>
               <div>
                 <strong>PCI DSS</strong>
                 <span>Payment Certified</span>
               </div>
             </div>
             <div className="footer-trust-badge">
-              <span>🛡️</span>
+              <span><Icon name="shield" /></span>
               <div>
                 <strong>Data Encrypted</strong>
                 <span>AES-256 at rest</span>
               </div>
             </div>
             <div className="footer-trust-badge">
-              <span>📋</span>
+              <span><Icon name="clipboard" /></span>
               <div>
                 <strong>GDPR Compliant</strong>
                 <span>Your data protected</span>
               </div>
             </div>
             <div className="footer-trust-badge">
-              <span>🔍</span>
+              <span><Icon name="search" /></span>
               <div>
                 <strong>Audited</strong>
                 <span>Regular pen-tests</span>
@@ -52,8 +53,8 @@ export default function Footer() {
           <img src="/logo.svg" alt="HeritageX" className="footer-logo" />
           <p className="muted">Discover, book, and explore heritage sites worldwide. Secure, trusted, and built for real travellers.</p>
           <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
-            <span className="footer-mini-badge">🔒 SSL Secured</span>
-            <span className="footer-mini-badge">✅ Trusted Platform</span>
+            <span className="footer-mini-badge"><Icon name="lock" size={14} /> SSL Secured</span>
+            <span className="footer-mini-badge"><Icon name="shield" size={14} /> Trusted Platform</span>
           </div>
         </div>
 
@@ -67,17 +68,17 @@ export default function Footer() {
 
         <div>
           <h3>Book Travel</h3>
-          <Link to="/flights">✈️ Flights</Link>
-          <Link to="/trains">🚂 Trains</Link>
-          <Link to="/hotels">🏨 Hotels</Link>
-          <Link to="/buses">🚌 Buses</Link>
-          <Link to="/local-transport">🚗 Cabs</Link>
+          <Link to="/flights">Flights</Link>
+          <Link to="/trains">Trains</Link>
+          <Link to="/hotels">Hotels</Link>
+          <Link to="/buses">Buses</Link>
+          <Link to="/local-transport">Cabs</Link>
         </div>
 
         <div>
           <h3>Company</h3>
           <Link to="/about">About Us</Link>
-          <Link to="/security">🛡️ Security</Link>
+          <Link to="/security"><Icon name="shield" size={15} /> Security</Link>
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/terms">Terms of Service</Link>
           <Link to="/languages">Languages</Link>
@@ -87,7 +88,7 @@ export default function Footer() {
           <h3>Support</h3>
           <a href="mailto:support@heritagex.com">support@heritagex.com</a>
           <a href="tel:18004029000">1800-402-900 (Toll Free)</a>
-          <a href="mailto:security@heritagex.com">🔒 security@heritagex.com</a>
+          <a href="mailto:security@heritagex.com"><Icon name="lock" size={15} /> security@heritagex.com</a>
           <a href="https://maps.google.com" target="_blank" rel="noreferrer">Find on Maps</a>
         </div>
       </div>
@@ -99,7 +100,7 @@ export default function Footer() {
           <div className="footer-bottom-links">
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>
-            <Link to="/security">🛡️ Security</Link>
+            <Link to="/security"><Icon name="shield" size={15} /> Security</Link>
           </div>
         </div>
       </div>
