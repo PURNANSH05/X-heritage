@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files
+.env
+**/.env
+.env.*
+
+# Build output
+/dist/
+**/dist/
+build/
+coverage/
+
+# Logs and debug files
+*.log
+*.err
+*.out
+*.pid
+
+# Editor / OS files
+.vite/
+.DS_Store
+Thumbs.db
+
+# Generated artifacts
+frontend/public/screenshots/
+frontend/dist/
+backend/.env

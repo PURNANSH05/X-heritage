@@ -69,7 +69,5 @@ const server = http.createServer((req, res) => {
   res.end('Build output not found. Run npm run build first.');
 });
 
-server.listen(port, '0.0.0.0', () => {
-  console.log(`HeritageX frontend serving on http://localhost:${port}`);
-});
+server.listen(port, '0.0.0.0');
 

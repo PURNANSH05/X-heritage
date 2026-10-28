@@ -11,7 +11,6 @@ export async function connectDatabase() {
   await mongoose.connect(uri, {
     serverSelectionTimeoutMS: 10000
   });
-  console.log(`MongoDB connected: ${mongoose.connection.name}`);
 
   // Add the bundled catalog only when a site is not already in MongoDB.
   // This makes the initial setup useful while preserving later database edits.
@@ -25,6 +24,4 @@ export async function connectDatabase() {
     })),
     { ordered: false }
   );
-
-  console.log(`Heritage catalog ready (${sites.length} bundled records checked)`);
 }

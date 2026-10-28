@@ -1038,9 +1038,7 @@ app.get('/api/admin/stats', async (_req, res) => {
 async function startServer() {
   try {
     await connectDatabase();
-    app.listen(port, () => {
-      console.log(`HeritageX backend listening on http://localhost:${port}`);
-    });
+    app.listen(port);
   } catch (error) {
     console.error(`Backend startup failed: ${error.message}`);
     process.exitCode = 1;

@@ -80,8 +80,8 @@ async function fetchThumbnailBatch(batch) {
       const result = Object.values(searchData?.query?.pages || {})
         .find((page) => page.thumbnail?.source);
       if (result?.thumbnail?.source) thumbnailCache.set(site.id, result.thumbnail.source);
-    } catch (error) {
-      console.warn(`Could not find a destination photo for ${site.name?.en}:`, error);
+    } catch {
+      // Ignore missing Wikipedia thumbnails and fall back to the local generated image.
     }
   }
 }
@@ -94,9 +94,7 @@ export async function fetchPlaceThumbnails(placeList = sites, { force = false } 
   for (let index = 0; index < pending.length; index += MAX_TITLES_PER_REQUEST) {
     const batch = pending.slice(index, index + MAX_TITLES_PER_REQUEST);
     const lookup = fetchThumbnailBatch(batch)
-      .catch((error) => {
-        console.warn('Could not load some destination photos:', error);
-      })
+      .catch(() => undefined)
       .finally(() => batch.forEach((site) => pendingLookups.delete(site.id)));
     batch.forEach((site) => pendingLookups.set(site.id, lookup));
   }

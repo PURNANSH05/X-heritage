@@ -8,22 +8,22 @@ if (!fs.existsSync(destDir)) {
   fs.mkdirSync(destDir, { recursive: true });
 }
 
-console.log(`Scanning source directory: ${srcDir}`);
 try {
   const files = fs.readdirSync(srcDir);
-  console.log(`Found ${files.length} items in source`);
-  
+
   let copiedCount = 0;
   files.forEach(file => {
     if (file.endsWith('.png') || file.endsWith('.webp') || file.endsWith('.jpg')) {
       const srcFile = path.join(srcDir, file);
       const destFile = path.join(destDir, file);
       fs.copyFileSync(srcFile, destFile);
-      console.log(`Copied: ${file}`);
       copiedCount++;
     }
   });
-  console.log(`Successfully copied ${copiedCount} screenshots to ${destDir}`);
+
+  if (copiedCount === 0) {
+    console.warn('No screenshots were copied. Check the source directory path.');
+  }
 } catch (err) {
   console.error(`Error copying files: ${err.message}`);
 }

@@ -682,6 +682,58 @@
       }
     ]
   },
+  "ajanta-caves-45": {
+    "heroImage": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80",
+    "photos": [
+      {
+        "title": "Ajanta Caves view",
+        "url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Ancient cave architecture",
+        "url": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
+  "konark-sun-temple-47": {
+    "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Konarka_Temple.jpg/1280px-Konarka_Temple.jpg",
+    "photos": [
+      {
+        "title": "Konark Sun Temple facade",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Konarka_Temple.jpg/1280px-Konarka_Temple.jpg"
+      },
+      {
+        "title": "Konark carved chariot detail",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/24_Chariot_Wheels%2C_illustrative_intricate_carving_in_one_at_the_Konarka_Sun_Temple.jpg/1280px-24_Chariot_Wheels%2C_illustrative_intricate_carving_in_one_at_the_Konarka_Sun_Temple.jpg"
+      }
+    ]
+  },
+  "victoria-memorial-51": {
+    "heroImage": "https://images.unsplash.com/photo-1505761671935-60e7d8d688d4?auto=format&fit=crop&w=1200&q=80",
+    "photos": [
+      {
+        "title": "Victoria Memorial exterior",
+        "url": "https://images.unsplash.com/photo-1505761671935-60e7d8d688d4?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "White marble monument and gardens",
+        "url": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
+  "india-gate-52": {
+    "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/India_Gate_%28All_India_War_Memorial%29.jpg/1280px-India_Gate_%28All_India_War_Memorial%29.jpg",
+    "photos": [
+      {
+        "title": "India Gate memorial structure",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/India_Gate_%28All_India_War_Memorial%29.jpg/1280px-India_Gate_%28All_India_War_Memorial%29.jpg"
+      },
+      {
+        "title": "India Gate at dusk",
+        "url": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80"
+      }
+    ]
+  },
   "colosseum-35": {
     "heroImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg",
     "photos": [
